@@ -1,0 +1,166 @@
+body, .ionic-body 
+{ 
+    overflow: visible;
+}
+.loginTab
+{
+	background:url(../img/login-Bg.png) center center fixed; 
+    padding-bottom: 100px;
+}
+.loginPart 
+{
+    top: 50%; 
+    left: 10%; 
+    position: relative; 
+    background: #fff; 
+    border: 1px solid #d1d1d1; 
+    padding: 10px; 
+    margin: 100px 0px 40px 0px; 
+}
+.loginPart p 
+{ 
+    font-size: 12px; 
+    padding-top: 10px; 
+    text-align: center;
+}
+.loginPart p a 
+{
+    color: #666; 
+    text-decoration: none; 
+}
+.loginPart p a:hover 
+{
+    color: #999; 
+    text-decoration: none; 
+}
+.registerText p 
+{
+    font-size: 13px; 
+    padding-top: 10px; 
+    text-align: center; 
+    font-weight:bold;
+}
+.registerText p a 
+{
+    color: #666; 
+    text-decoration: none; 
+}
+.registerText p a:hover 
+{
+    color: #999; 
+    text-decoration: none; 
+}
+.newUserRegister 
+{ 
+    margin-top: 30px;
+}
+.newUserRegister p 
+{ 
+    text-align: center; 
+    font-size: 14px; 
+    padding-top: 15px;
+}
+.newUserRegister a 
+{ 
+    text-decoration:none;
+}
+.newUserRegister a:hover 
+{ 
+    text-decoration:none;
+}
+.loginPart .card, .list-inset img 
+{ 
+    width: 180px; 
+    height: auto; 
+    margin: 0px auto; 
+    display: block; 
+    padding-bottom: 30px;
+}
+.loginPart .card, .list-inset 
+{
+  overflow: visible;
+  margin: 20px 10px;
+  border-radius: 2px;
+  background-color: transparent  !important; 
+}
+.register .button 
+{ 
+    margin-right: 20px; 
+    margin-top: 25px; 
+    margin-bottom: 15px;
+}  
+.headLogo p
+{    
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+}
+.headLogo img
+{
+	width: 30px;
+    margin-top: 4px;
+    margin-left: 20px;
+}
+.SearchBox
+{
+	margin-top: 60px;
+}
+.searchTab h5 
+{ 
+    padding-left: 10px; 
+    padding-top: 30px;
+}
+.loginPart a 
+{ 
+    text-decoration:none;
+}
+.loginPart a:hover 
+{ 
+    text-decoration:none;
+}
+.card p 
+{ 
+    font-size: 13px; 
+}
+.slider 
+{
+    height:100%; 
+}
+.scrool
+{
+    height:100%;
+}
+.magazinesContent 
+{ 
+    margin-top: 125px; 
+    padding: 0px 10px;
+}
+.magazinesContent img 
+{
+    width: 22%;
+    margin-left: 37px;
+    margin-bottom: 35px;
+    overflow: visible;
+}
+.magazinesContent 
+{ 
+    width: 100%;
+}
+div.color-red> img:first-child 
+{ 
+    margin-left: 0px !important;
+}
+.slider-pager 
+{
+    font-size: 10px;
+}
+.slider-pager .slider-pager-page 
+{
+    margin: 0px 0px;
+}
+.magazinesContent h6
+{
+    font-size: 17px;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
