@@ -132,23 +132,9 @@ body, .ionic-body
 }
 .magazinesContent 
 { 
+    width: 100%;
     margin-top: 125px; 
     padding: 0px 10px;
-}
-.magazinesContent img 
-{
-    width: 22%;
-    margin-left: 37px;
-    margin-bottom: 35px;
-    overflow: visible;
-}
-.magazinesContent 
-{ 
-    width: 100%;
-}
-div.color-red> img:first-child 
-{ 
-    margin-left: 0px !important;
 }
 .slider-pager 
 {
@@ -160,7 +146,38 @@ div.color-red> img:first-child
 }
 .magazinesContent h6
 {
-    font-size: 17px;
+    font-size: 15px;
     margin-bottom: 12px;
     font-weight: 500;
+}
+
+
+.color-red { width: 102%;}
+.color-red img 
+{
+    width: 22%;
+    margin-bottom: 40px;
+    margin-left: 37px;
+    display: inline;
+}
+div.color-red a:first-child img
+{ 
+    margin-left: 0px !important;
+}
+
+.subscriptionDetail 
+{ 
+    margin-top: 125px; 
+    padding: 0px 10px;
+}
+.subscriptionDetail img
+{
+    width: 70%;
+}
+.subscriptionDetail ul li 
+{
+    font-size: 13px;
+    padding-top: 10px;
+    list-style: square !important;
+    font-weight: bold;
 }
