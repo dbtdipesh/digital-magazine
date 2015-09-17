@@ -181,3 +181,9 @@ div.color-red a:first-child img
     list-style: square !important;
     font-weight: bold;
 }
+
+.subscriptionDetail .button-balanced 
+{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
