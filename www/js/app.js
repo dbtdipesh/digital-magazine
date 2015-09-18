@@ -34,14 +34,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     views: {
       'menuContent': {
         templateUrl: 'magazine-page.html',
+        controller: 'MagazineCtrl'
       }
     }
   })
   .state('login', {
     url: '/login',
-    
-        templateUrl: 'login-main.html',
-       controller: 'AppCtrl'
+    templateUrl: 'login-main.html',
+    controller: 'AppCtrl'
     
   })
   .state('app.search', {
@@ -72,7 +72,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
 
    .state('app.detail', {
-    url: '/detail',
+    url: '/detail/{id}',
     views: {
       'menuContent': {
         templateUrl: 'subscription-detail-page.html',
