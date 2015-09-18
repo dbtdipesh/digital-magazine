@@ -275,3 +275,25 @@ div.color-red a:first-child img
     margin-top: 20px;
     margin-right: 10px;
 }
+.profilePage
+{
+    font-size: 12px;
+    color: #333;
+}
+.profilePage a
+{
+    text-decoration:none;
+    color: #666;
+    font-size: 13px;
+}
+.profilePage a:hover
+{
+    text-decoration:none;
+    color: #999;
+    font-size: 13px;
+}
+.profilePage .button
+{
+    margin-left: 10px;
+    margin-top: 20px;
+}
