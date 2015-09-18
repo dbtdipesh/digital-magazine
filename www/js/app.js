@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'starter.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -11,6 +11,7 @@ angular.module('starter', ['ionic'])
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+       cordova.plugins.Keyboard.disableScroll(true);
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
@@ -18,6 +19,72 @@ angular.module('starter', ['ionic'])
   });
 
 })
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+
+    .state('app', {
+    url: '/app',
+    abstract: true,
+    templateUrl: 'menu.html',
+    controller: 'AppCtrl'
+  })
+
+  .state('app.magazine', {
+    url: '/magazine',
+    views: {
+      'menuContent': {
+        templateUrl: 'magazine-page.html',
+      }
+    }
+  })
+  .state('login', {
+    url: '/login',
+    
+        templateUrl: 'login-main.html',
+       controller: 'AppCtrl'
+    
+  })
+  .state('app.search', {
+    url: '/search',
+    views: {
+      'menuContent': {
+        templateUrl: 'search.html',
+        
+      }
+    }
+  })
+  .state('newRegister', {
+    url: '/newRegister',
+    
+        templateUrl: 'registration-new-subscriber.html',
+       
+    
+  })
+
+
+  .state('digitalAccess', {
+    url: '/digitalAccess',
+    
+        templateUrl: 'digital-access.html',
+      
+    
+  })
+
+
+   .state('app.detail', {
+    url: '/detail',
+    views: {
+      'menuContent': {
+        templateUrl: 'subscription-detail-page.html',
+         controller: 'DetailCtrl'
+      }
+    }
+  })
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/login');
+});
+
+
 
 
 

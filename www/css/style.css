@@ -2,6 +2,11 @@ body, .ionic-body
 { 
     overflow: visible;
 }
+.view-container
+{
+    
+
+}
 .loginTab
 {
 	background:url(../img/login-Bg.png) center center fixed; 
