@@ -85,3 +85,35 @@
 	}
 
 }
+
+@media (min-width: 900px)
+{
+
+	.subscriptionDetail ul li 
+	{
+    	font-size: 16px;
+    	padding-top: 12px;
+	}
+
+	.subscriptionDetail .button-balanced 
+	{
+    	margin-top: 50px;
+    	margin-bottom: 50px;		
+	}
+
+}
+
+@media (min-width: 680px)
+{
+	.modal 
+	{
+        top: 4%;
+	    right: 20%;
+	    bottom: 19%;
+	    left: 20%;
+	    min-height: 240px;
+	    width: 60%;
+		}
+}
+
+

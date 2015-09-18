@@ -53,6 +53,26 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     }
   })
+.state('app.setting', {
+    url: '/setting',
+    views: {
+      'menuContent': {
+        templateUrl: 'setting.html',
+        
+      }
+    }
+  })
+  
+  .state('app.profile', {
+    url: '/profile',
+    views: {
+      'menuContent': {
+        templateUrl: 'profile.html',
+        
+      }
+    }
+  })
+
   .state('newRegister', {
     url: '/newRegister',
     
@@ -68,6 +88,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         templateUrl: 'digital-access.html',
       
     
+  })
+
+  .state('app.subscriberVerification', {
+    url: '/subscriberVerification',
+    views: {
+      'menuContent': {
+        templateUrl: 'subscriber-verification.html',
+         controller: 'DetailCtrl'
+      }
+    }
   })
 
 
