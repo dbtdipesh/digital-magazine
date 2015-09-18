@@ -42,15 +42,19 @@ angular.module('starter.controllers', [])
   };
 })
 .controller('MagazineCtrl', function($scope) {
-  $scope.magazines = [
-    { title: 'Reggae', id: 1, cover:'mag-01.jpg' },
+  $scope.i=0;
+  $scope.magazines1 = [
+    { title: 'Hulk', id: 1, cover:'mag-01.jpg' },
     { title: 'Chill', id: 2, cover:'mag-02.jpg' },
     { title: 'Dubstep', id: 3, cover:'mag-03.jpg' },
     { title: 'Indie', id: 4, cover:'mag-02.jpg' },
     { title: 'Rap', id: 5 , cover:'mag-01.jpg'},
     { title: 'Cowbell', id: 6, cover:'mag-03.jpg' }
   ];
-  $scope.magazines1 = [
+
+  $scope.loopcount=Math.floor($scope.magazines1.length%4);
+  
+  $scope.magazines2 = [
     { title: 'Reggae', id: 1, cover:'mag-03.jpg' },
     { title: 'Chill', id: 2, cover:'mag-02.jpg' },
     { title: 'Dubstep', id: 3, cover:'mag-01.jpg' },
