@@ -180,7 +180,7 @@ div.color-red a:first-child img
 }
 .subscriptionDetail img
 {
-    width: 70%;
+    width: 60%;
 }
 .subscriptionDetail ul li 
 {
@@ -194,4 +194,51 @@ div.color-red a:first-child img
 {
     margin-top: 30px;
     margin-bottom: 30px;
+}
+.modalBox .ion-ios-close-empty
+{
+    margin-right: 15px;
+}
+.notSubscriberDetail
+{
+    padding: 20px 20px;
+}
+.notSubscriberDetail img
+{
+    width: 250px;
+}
+.notSubscriberDetail ul li
+{
+    padding-top: 7px;
+}
+.notSubscriberDetail h5
+{
+    font-size: 15px;
+    font-weight: 600;
+    padding-top: 20px;
+}
+.backButtons
+{
+    padding-left: 10px;
+}
+.notSubscriberDetail label, input, button, select, textarea 
+{
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 1.42857;
+    margin-right: 15px;
+}
+
+.notSubscriberDetail input[type="radio"], input[type="checkbox"] 
+{
+    margin: 0px;
+    line-height: normal;
+    position: relative;
+    top: 2px;
+}
+.notSubscriberDetail .button 
+{
+    margin-top: 40px;
+    margin-right:10px;
+
 }
