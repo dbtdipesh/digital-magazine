@@ -52,8 +52,8 @@ angular.module('starter.controllers', [])
   ];
   $scope.magazines1 = [
     { title: 'Reggae', id: 1, cover:'mag-03.jpg' },
-    { title: 'Chill', id: 2,, cover:'mag-02.jpg' },
-    { title: 'Dubstep', id: 3,, cover:'mag-01.jpg' },
+    { title: 'Chill', id: 2, cover:'mag-02.jpg' },
+    { title: 'Dubstep', id: 3, cover:'mag-01.jpg' },
     { title: 'Indie', id: 4, cover:'mag-02.jpg' },
     { title: 'Rap', id: 5 , cover:'mag-03.jpg'},
     { title: 'Cowbell', id: 6, cover:'mag-01.jpg' }
