@@ -4,14 +4,15 @@ body, .ionic-body
 }
 .view-container
 {
-    
+
 
 }
-.loginTab
+/*.loginTab
 {
 	background:url(../img/login-Bg.png) center center fixed; 
     padding-bottom: 100px;
-}
+}*/
+.formBg{ background:url(../img/login-Bg.png) center center fixed;}
 .loginPart 
 {
     top: 50%; 
@@ -20,7 +21,7 @@ body, .ionic-body
     background: #fff; 
     border: 1px solid #d1d1d1; 
     padding: 10px; 
-    margin: 40px 0px -65px 0px; 
+    margin: 40px 0px 40px 0px; 
 }
 .loginPart p 
 { 
@@ -141,6 +142,7 @@ body, .ionic-body
     width: 100%;
     margin-top: 125px; 
     padding: 0px 10px;
+    background-color: #fff;
 }
 .slider-pager 
 {
