@@ -70,6 +70,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     
   })
 
+  .state('app.subscriberVerification', {
+    url: '/subscriberVerification',
+    views: {
+      'menuContent': {
+        templateUrl: 'subscriber-verification.html',
+         controller: 'DetailCtrl'
+      }
+    }
+  })
+
 
    .state('app.detail', {
     url: '/detail/{id}',

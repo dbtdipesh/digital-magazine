@@ -242,3 +242,36 @@ div.color-red a:first-child img
     margin-right:10px;
 
 }
+
+
+.subscriptionVerification 
+{ 
+    margin-top: 125px; 
+    padding: 0px 10px;
+}
+.subscriptionVerification h4
+{
+    font-weight: bold;
+    font-size: 16px;
+}
+.subscriptionVerification img
+{
+    width: 60%;
+    margin-top: 30px;
+}
+.subscriptionVerification ul li 
+{
+    font-size: 13px;
+    padding-top: 5px;
+}
+
+.subscriptionVerification .button-balanced 
+{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.subscriptionVerification .button
+{
+    margin-top: 20px;
+    margin-right: 10px;
+}

@@ -107,11 +107,13 @@
 {
 	.modal 
 	{
-        top: 5%;
-    	right: 20%;
-	    bottom: 21%;
-	    left: 25.5%;
+        top: 4%;
+	    right: 20%;
+	    bottom: 19%;
+	    left: 20%;
 	    min-height: 240px;
-	    width: 329px;
-	}
+	    width: 60%;
+		}
 }
+
+
