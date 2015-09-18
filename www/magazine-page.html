@@ -18,24 +18,64 @@
       <!---------- searchbox end ---------->
 
 
-<div data-ng-repeat="i in 1..100">
-  do something
-</div>
+
 
       
       <ion-content class="magazinesContent" >
-  <!-- <ion-slide-box>
   
-      <ion-slide ng-repeat="m in 1..3">
-     test
-        <div class="color-red" >
-          <a ng-repeat="magazine in magazines1 | limitTo:4:0" href="#app/detail/{{magazine.id}}"><img ng-src="img/{{magazine.cover}}"></a>
-          {{i=i+4}}
+      <h6>Mine Magasiner</h6>
+      <ion-slide-box>
+  
+      <ion-slide ng-repeat="n in magazines1 | limitTo:loopcount" ng-init='current=0;'>
+      
+     
+        <div class="color-red"  >
+          <a ng-repeat="magazine in magazines1 | limitTo:4:current+($index*4)"
+
+            ng-attr-href="{{(magazine.subscribed) ? '#app/detail/'+magazine.id : undefined}}"
+
+            ng-click="(magazine.subscribed) ?undefined:login()"
+           
+          ><img ng-src="img/{{magazine.cover}}"></a>
+          
         </div>
       </ion-slide>
-      </ion-slide-box> -->
+
+      
+
+
+
+
+
+
+
+      </ion-slide-box>
 
       <h6>Mine Magasiner</h6>
+      <ion-slide-box>
+ 
+      <ion-slide ng-repeat="n in magazines2 | limitTo:loopcount2" ng-init='current=0;'>
+      
+     
+        <div class="color-red"  >
+          <a ng-repeat="magazine in magazines2 | limitTo:4:current+($index*4)" href="#app/detail/{{magazine.id}}"><img ng-src="img/{{magazine.cover}}"></a>
+          
+        </div>
+      </ion-slide>
+
+      
+
+
+
+
+
+
+
+      </ion-slide-box>
+
+
+
+      <h6>Andre Magasiner</h6>
 
 
      
@@ -64,31 +104,6 @@
       
 
 
-  <h6>Andre Magasiner</h6>
-    <ion-slide-box>
-      
-      <ion-slide>
-      <div class="color-red">
-        <a href="#"><img src="img/mag-01.jpg"></a>
-        <a href="#"><img src="img/mag-02.jpg"></a>
-        <a href="#"><img src="img/mag-03.jpg"></a>
-        <a href="#"><img src="img/mag-02.jpg"></a>
-      </div>  
-      </ion-slide>
-
-
-      <ion-slide>
-      <div class="color-red">
-        <a href="#"><img src="img/mag-01.jpg"></a>
-        <a href="#"><img src="img/mag-02.jpg"></a>
-        <a href="#"><img src="img/mag-03.jpg"></a>
-        <a href="#"><img src="img/mag-02.jpg"></a>
-      </div>  
-      </ion-slide>
-
-
-
-      </ion-slide-box>
       </ion-content>
 
       
