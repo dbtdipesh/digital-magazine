@@ -27,7 +27,8 @@ angular.module('starter.controllers', [])
   // Open the login modal
   $scope.login = function() {
      $scope.modal.show();
-   // alert("a")
+    //alert("a")
+    //console.log('a')
   };
 
   // Perform the login action when the user submits the login form
@@ -44,24 +45,27 @@ angular.module('starter.controllers', [])
 .controller('MagazineCtrl', function($scope) {
   $scope.i=0;
   $scope.magazines1 = [
-    { title: 'Hulk', id: 1, cover:'mag-01.jpg' },
-    { title: 'Chill', id: 2, cover:'mag-02.jpg' },
-    { title: 'Dubstep', id: 3, cover:'mag-03.jpg' },
-    { title: 'Indie', id: 4, cover:'mag-02.jpg' },
-    { title: 'Rap', id: 5 , cover:'mag-01.jpg'},
-    { title: 'Cowbell', id: 6, cover:'mag-03.jpg' }
+    { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
+    { title: 'Chill', id: 2, cover:'mag-02.jpg' ,subscribed:false},
+    { title: 'Dubstep', id: 3, cover:'mag-03.jpg' ,subscribed:true},
+    { title: 'Indie', id: 4, cover:'mag-02.jpg',subscribed:true },
+    { title: 'Rap', id: 5 , cover:'mag-01.jpg',subscribed:false},
+    { title: 'Cowbell', id: 6, cover:'mag-03.jpg',subscribed:true }
   ];
 
-  $scope.loopcount=Math.floor($scope.magazines1.length%4);
-  
+  $scope.loopcount=Math.ceil($scope.magazines1.length/4);
+
   $scope.magazines2 = [
-    { title: 'Reggae', id: 1, cover:'mag-03.jpg' },
-    { title: 'Chill', id: 2, cover:'mag-02.jpg' },
-    { title: 'Dubstep', id: 3, cover:'mag-01.jpg' },
-    { title: 'Indie', id: 4, cover:'mag-02.jpg' },
-    { title: 'Rap', id: 5 , cover:'mag-03.jpg'},
-    { title: 'Cowbell', id: 6, cover:'mag-01.jpg' }
+    { title: 'Reggae', id: 1, cover:'mag-03.jpg',subscribed:true },
+    { title: 'Chill', id: 2, cover:'mag-02.jpg',subscribed:true },
+    { title: 'Dubstep', id: 3, cover:'mag-01.jpg',subscribed:true },
+    { title: 'Indie', id: 4, cover:'mag-02.jpg',subscribed:true },
+    { title: 'Rap', id: 5 , cover:'mag-03.jpg',subscribed:true},
+    { title: 'Cowbell', id: 6, cover:'mag-01.jpg',subscribed:true },
+    { title: 'Cowbell', id: 7, cover:'mag-02.jpg',subscribed:true },
   ];
+
+  $scope.loopcount2=Math.ceil($scope.magazines2.length/4);
 })
 .controller('DetailCtrl', function($scope, $stateParams) {
 });
