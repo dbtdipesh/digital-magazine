@@ -1,5 +1,5 @@
 
-
+<ion-view>
 
     <div class="searchTab"><!---------- searchbox start ---------->
 
@@ -23,35 +23,27 @@
       
       <ion-content class="magazinesContent" >
   
-      <h6>Mine Magasiner</h6>
-      <ion-slide-box>
+      <h6>Reis</h6>
+     <!--  <ion-slide-box> -->
   
-      <ion-slide ng-repeat="n in magazines1 | limitTo:loopcount" ng-init='current=0;'>
+      <ion-slide ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
       
      
         <div class="color-red"  >
-          <a ng-repeat="magazine in magazines1 | limitTo:4:current+($index*4)"
+          <a ng-repeat="magazine in magazines | limitTo:4:current+($index*4)"
 
-            ng-attr-href="{{(magazine.subscribed) ? '#app/detail/'+magazine.id : undefined}}"
+            ng-attr-href="{{!(magazine.subscribed) ? '#app/detail/'+magazine.id : undefined}}"
 
-            ng-click="(magazine.subscribed) ?undefined:login()"
+            ng-click="(magazine.subscribed) ?undefined:undefined"
            
-          ><img ng-src="img/{{magazine.cover}}"></a>
+          ><img ng-src="{{magazine.image}}"></a>
           
         </div>
       </ion-slide>
 
-      
+      <!-- </ion-slide-box> -->
 
-
-
-
-
-
-
-      </ion-slide-box>
-
-      <h6>Mine Magasiner</h6>
+      <!-- <h6>Mine Magasiner</h6>
       <ion-slide-box>
  
       <ion-slide ng-repeat="n in magazines2 | limitTo:loopcount2" ng-init='current=0;'>
@@ -152,7 +144,7 @@
         <a href="#"><img src="img/mag-02.jpg"></a>
       </div>  
       </ion-slide>
-      </ion-slide-box>
+      </ion-slide-box> -->
 
 
 

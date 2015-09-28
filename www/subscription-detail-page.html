@@ -21,17 +21,17 @@
 
       
       <ion-content class="subscriptionDetail">
-      <p>Rise 01.09.15</p>
-      <img src="img/mag-04.jpg">
+      <p>{{magazine.name}}</p>
+      <img ng-src="{{magazine.image}}">
 
       <ul>
-        <li>Experience the Mediterranean</li>
-        <li>Swimming in Australia</li>
-        <li>10 best hotels in the world</li>
+        <li>{{magazine.article}}</li>
+        <li>{{magazine.issued_date}}</li>
+        <li>{{magazine.introduction}}</li>
       </ul>
 
 
-      <button class="button button-balanced">Open Magazine</button>
+      <a class="button button-balanced" href="#app/open/{{magazine.id}}">Open Magazine</a>
 
 
 

@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+var datModule=angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -42,9 +42,29 @@ angular.module('starter.controllers', [])
     }, 1000);
   };
 })
-.controller('MagazineCtrl', function($scope) {
+.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading',function($scope,MagazineFactory,$ionicLoading){
   $scope.i=0;
-  $scope.magazines1 = [
+
+   $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true,
+    maxWidth: 200,
+    showDelay: 0
+  });
+
+  MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+       console.log(cdata);
+       if(cdata.message=='Succes'){
+         $scope.magazines=cdata.data;
+         $scope.loopcount=Math.ceil($scope.magazines.length/4);
+         //console.log(cdata.data);
+         $ionicLoading.hide();
+        }
+        //console.log($scope.magazines);
+    });
+  
+  /*$scope.magazines1 = [
     { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
     { title: 'Chill', id: 2, cover:'mag-02.jpg' ,subscribed:false},
     { title: 'Dubstep', id: 3, cover:'mag-03.jpg' ,subscribed:true},
@@ -53,7 +73,7 @@ angular.module('starter.controllers', [])
     { title: 'Cowbell', id: 6, cover:'mag-03.jpg',subscribed:true }
   ];
 
-  $scope.loopcount=Math.ceil($scope.magazines1.length/4);
+  $scope.loopcount3=Math.ceil($scope.magazines1.length/4);
 
   $scope.magazines2 = [
     { title: 'Reggae', id: 1, cover:'mag-03.jpg',subscribed:true },
@@ -65,8 +85,98 @@ angular.module('starter.controllers', [])
     { title: 'Cowbell', id: 7, cover:'mag-02.jpg',subscribed:true },
   ];
 
-  $scope.loopcount2=Math.ceil($scope.magazines2.length/4);
-})
-.controller('DetailCtrl', function($scope, $stateParams) {
+  $scope.loopcount2=Math.ceil($scope.magazines2.length/4);*/
+}])
+.controller('DetailCtrl', function($scope, $stateParams,MagazineFactory,$ionicLoading) {
+
+console.log($stateParams.id);
+   $scope.i=0;
+
+   $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true,
+    maxWidth: 200,
+    showDelay: 0
+  });
+
+  MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
+       console.log(cdata);
+       if(cdata.message=='Success'){
+         $scope.magazine=cdata.data;
+        // $scope.loopcount=Math.ceil($scope.magazines.length/4);
+         //console.log(cdata.data);
+         $ionicLoading.hide();
+        }
+        //console.log($scope.magazines);
+    });
+
 });
 
+
+/*datModule.factory('datfactory', function ($http, $q){
+
+    this.getlist = function(){            
+        return $http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-releases-by-magazine-id?magazine_id=1',{'Access-Control-Allow-Origin': 'localhost:*'})
+            .then(function(response) {
+              console.log(response.data); //I get the correct items, all seems ok here
+             // $scope.$apply()
+              return response.data;
+            });            
+    }
+    return this;
+});
+
+datModule.controller('MagazineCtrl1', function ($scope, $state,$http,$ionicLoading,$q){
+  console.log('MagazineCtrl');
+  
+  $scope.init = function(){
+    $scope.page = 1;
+    $scope.getReleases()
+    .then(function(res){
+      // success
+      console.log('Magazines: ', res)
+      $scope.magazines = res.data;
+    }, function(status){
+      // err
+      $scope.pageError = status;
+    })
+  }
+
+  $scope.setActive = function(index){
+    angular.forEach($scope.imageList, function(image){
+      image.active = false;
+    })
+
+    $scope.imageList[index].active = true
+  }
+
+  $scope.getReleases = function(){
+    var defer = $q.defer();
+
+    $http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-releases-by-magazine-id?magazine_id=1')
+    .success(function(res){
+      defer.resolve(res)
+    })
+    .error(function(status, err){
+      defer.reject(status)
+    })
+
+    return defer.promise;
+  }
+
+  $scope.nextPage = function(){
+    $scope.page += 1;
+
+    $scope.getReleases()
+    .then(function(res){
+      
+    })
+  }
+
+  $scope.init();
+});
+
+
+
+*/
