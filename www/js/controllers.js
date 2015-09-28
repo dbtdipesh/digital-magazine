@@ -103,7 +103,7 @@ console.log($stateParams.id);
   MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
        console.log(cdata);
        if(cdata.message=='Success'){
-         $scope.magazine=cdata.data;
+         $scope.magazine=cdata.data; 
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
          $ionicLoading.hide();

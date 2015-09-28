@@ -38,7 +38,7 @@ angular.module('magazines.services',[]).factory('MagazineFactory',['$http',funct
 
                       //  $scope.$apply();
 
-                        return ret;
+                        return ret; 
                     } 
             }        
         }
