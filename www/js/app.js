@@ -122,7 +122,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   })
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
-})
+});
 
 /*.config(['$httpProvider', function($httpProvider,$http) {
         $httpProvider.defaults.useXDomain = true;
