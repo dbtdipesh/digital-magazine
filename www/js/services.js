@@ -34,6 +34,10 @@ angular.module('magazines.services',[]).factory('MagazineFactory',['$http',funct
                             method: "get",
                             data: data,
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(){
+                                alert("success");
+                            }).error(function(){
+                                alert("failed");
                             });
 
                       //  $scope.$apply();
