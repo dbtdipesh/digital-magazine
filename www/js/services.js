@@ -33,7 +33,7 @@ angular.module('magazines.services',[]).factory('MagazineFactory',['$http',funct
                             url: url+'get-all-releases-by-magazine-id?magazine_id=1',
                             method: "get",
                             data: data,
-                           // headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                             });
 
                       //  $scope.$apply();

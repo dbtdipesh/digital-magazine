@@ -124,7 +124,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   $urlRouterProvider.otherwise('/login');
 })
 
-.config(['$httpProvider', function($httpProvider,$http) {
+/*.config(['$httpProvider', function($httpProvider,$http) {
         $httpProvider.defaults.useXDomain = true;
         //$httpProvider.defaults.withCredentials = true;
         delete $httpProvider.defaults.headers.common["X-Requested-With"];
@@ -132,7 +132,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
         $httpProvider.defaults.headers.common["Content-Type"] = "application/x-www-form-urlencoded";
        // $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
     }
-])
+])*/
 /*.config(['$httpProvider', function($httpProvider) {
         $httpProvider.defaults.useXDomain = true;
         $httpProvider.defaults.headers.common = 'Content-Type: application/json';
