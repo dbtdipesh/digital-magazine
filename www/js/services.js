@@ -18,7 +18,7 @@ angular.module('magazines.services',[]).factory('MagazineFactory',['$http',funct
             },
             getReleaseById:function(id){
             	//data={id:1};
-            	return $http.post(url+'get-release-by-id?id='+id);
+            	return $http.post(url+'get-release-by-id?token=AzEXshrS&id='+id);
             },
 
             getAllReleasesByMagazineId:function(){
@@ -30,7 +30,7 @@ angular.module('magazines.services',[]).factory('MagazineFactory',['$http',funct
                  var data =JSON.stringify({magazine_id: '1'});
                 //return $http.post('http://localhost/attendance/api/login',data);
                var ret= $http({
-                            url: url+'get-all-releases-by-magazine-id?magazine_id=1',
+                            url: url+'get-all-releases-by-magazine-id?token=AzEXshrS&magazine_id=1',
                             method: "get",
                             data: data,
                            // headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
