@@ -8,6 +8,7 @@
       Ionic Framework Team
     </author>
   <content src="index.html"/>
+  <access origin="*"/>
   <allow-navigation href="http://*/*" />
   <access origin="*" subdomains="true"/>
   <preference name="webviewbounce" value="false"/>
