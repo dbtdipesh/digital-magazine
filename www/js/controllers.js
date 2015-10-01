@@ -1,3 +1,4 @@
+var Book;
 var datModule=angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -42,7 +43,7 @@ var datModule=angular.module('starter.controllers', [])
     }, 1000);
   };
 })
-.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading',function($scope,MagazineFactory,$ionicLoading){
+.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading','$stateParams',function($scope,MagazineFactory,$ionicLoading,$stateParams){
   $scope.i=0;
 
    $ionicLoading.show({
@@ -52,6 +53,32 @@ var datModule=angular.module('starter.controllers', [])
     maxWidth: 200,
     showDelay: 0
   });
+//alert($stateParams.id)
+   if($stateParams.id!=undefined){
+     $scope.onSwipeLeft = function () {
+  // Do whatever here to manage swipe left
+  alert("left");
+};
+
+  MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
+       console.log(cdata);
+       if(cdata.message=='Success'){
+         $scope.magazine=cdata.data; 
+        // $scope.loopcount=Math.ceil($scope.magazines.length/4);
+         //console.log(cdata.data);
+           Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
+           //Book = ePub($scope.magazine.epub_file);
+
+           Book.renderTo("area").then(function(){
+              Book.setStyle("padding", "0 40px");
+            });
+          //Book.renderTo("area");
+
+         $ionicLoading.hide();
+        }
+        //console.log($scope.magazines);
+    });
+}else{
 
   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
        console.log(cdata);
@@ -59,10 +86,15 @@ var datModule=angular.module('starter.controllers', [])
          $scope.magazines=cdata.data;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
+       
+
+
          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
     });
+
+}
   
   /*$scope.magazines1 = [
     { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
@@ -87,9 +119,9 @@ var datModule=angular.module('starter.controllers', [])
 
   $scope.loopcount2=Math.ceil($scope.magazines2.length/4);*/
 }])
-.controller('DetailCtrl', function($scope, $stateParams,MagazineFactory,$ionicLoading) {
+/*.controller('DetailCtrl', function($scope, $stateParams,MagazineFactory,$ionicLoading) {
 
-console.log($stateParams.id);
+//console.log($stateParams.id);
    $scope.i=0;
 
    $ionicLoading.show({
@@ -100,18 +132,31 @@ console.log($stateParams.id);
     showDelay: 0
   });
 
+  $scope.onSwipeLeft = function () {
+  // Do whatever here to manage swipe left
+  alert("left");
+};
+
   MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
        console.log(cdata);
        if(cdata.message=='Success'){
          $scope.magazine=cdata.data; 
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
+           Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
+           //Book = ePub($scope.magazine.epub_file);
+
+           Book.renderTo("area").then(function(){
+              Book.setStyle("padding", "0 40px");
+            });
+          //Book.renderTo("area");
+
          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
     });
 
-});
+});*/
 
 
 /*datModule.factory('datfactory', function ($http, $q){

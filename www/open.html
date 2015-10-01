@@ -1,7 +1,10 @@
-<ion-view class="profilePage">
-<ion-content>
 
+<ion-view on-swipe-right="Book.prevPage();" on-swipe-left="Book.nextPage();">
+<ion-content >
 
+<div id="prev" onclick="Book.prevPage();" class="arrow">‹</div>
+<div id="area" ></div>
+<div id="next" onclick="Book.nextPage();"class="arrow">›</div>
 
 
 </ion-view>
