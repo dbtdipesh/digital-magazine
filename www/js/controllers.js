@@ -42,8 +42,39 @@ var datModule=angular.module('starter.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+    $scope.setCurrentUsername = function(name) {
+    $scope.username = name;
+  };
+
+
 })
-.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading','$stateParams',function($scope,MagazineFactory,$ionicLoading,$stateParams){
+.controller('LoginCtrl',function($scope, $state, $ionicPopup, AuthService){
+  $scope.data = {};
+ 
+  $scope.login = function(data) {
+    AuthService.login(data.username, data.password).then(function(authenticated) {
+      $state.go('app.magazine', {}, {reload: true});
+      //$scope.setCurrentUsername(data.username);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Login failed!',
+        template: 'Please check your credentials!'
+      });
+    });
+  };
+
+})
+.controller('SettingCtrl',function($scope, $state, $http, $ionicPopup, AuthService){
+
+  $scope.token = window.localStorage.getItem('tokenkey');
+   $scope.logout = function() {
+
+    AuthService.logout();
+    $state.go('login');
+  };
+})
+.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate){
   $scope.i=0;
 
    $ionicLoading.show({
@@ -56,9 +87,15 @@ var datModule=angular.module('starter.controllers', [])
 //alert($stateParams.id)
    if($stateParams.id!=undefined){
      $scope.onSwipeLeft = function () {
-  // Do whatever here to manage swipe left
-  alert("left");
-};
+        // Do whatever here to manage swipe left
+        //alert("left");
+        Book.nextPage();
+      };
+      $scope.onSwipeRight = function () {
+        // Do whatever here to manage swipe left
+        //alert("left");
+        Book.prevPage();
+      };
 
   MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
        console.log(cdata);
@@ -66,8 +103,8 @@ var datModule=angular.module('starter.controllers', [])
          $scope.magazine=cdata.data; 
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
-           Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
-           //Book = ePub($scope.magazine.epub_file);
+           //Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
+           Book = ePub($scope.magazine.epub_file);
 
            Book.renderTo("area").then(function(){
               Book.setStyle("padding", "0 40px");
@@ -86,7 +123,7 @@ var datModule=angular.module('starter.controllers', [])
          $scope.magazines=cdata.data;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
-       
+        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
 
 
          $ionicLoading.hide();

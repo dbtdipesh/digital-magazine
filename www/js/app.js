@@ -33,7 +33,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   .state('login', {
     url: '/login',
     templateUrl: 'login-main.html',
-    controller: 'AppCtrl'
+    //controller: 'AppCtrl'
+    controller: 'LoginCtrl'
     
   })
   .state('app.search', {
@@ -50,6 +51,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'setting.html',
+        controller:'SettingCtrl'
         
       }
     }
@@ -139,6 +141,27 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
         //$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
     }]);*/
+
+.run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
+  $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
+ 
+    if ('data' in next && 'authorizedRoles' in next.data) {
+      var authorizedRoles = next.data.authorizedRoles;
+      if (!AuthService.isAuthorized(authorizedRoles)) {
+        event.preventDefault();
+        $state.go($state.current, {}, {reload: true});
+        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+      }
+    }
+ 
+    if (!AuthService.isAuthenticated()) {
+      if (next.name !== 'login' && next.name !== 'newRegister') {
+        event.preventDefault();
+        $state.go('login');
+      }
+    }
+  });
+})
 
 
 

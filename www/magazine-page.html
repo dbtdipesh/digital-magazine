@@ -24,7 +24,7 @@
       <ion-content class="magazinesContent" >
   
       <h6>Reis</h6>
-     <!--  <ion-slide-box> -->
+     <ion-slide-box delegate-handle="epub-viewer" on-slide-changed="slideChanged(index)" auto-play="true" does-continue="true"> 
   
       <ion-slide ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
       
@@ -41,7 +41,7 @@
         </div>
       </ion-slide>
 
-      <!-- </ion-slide-box> -->
+     </ion-slide-box>
 
       <!-- <h6>Mine Magasiner</h6>
       <ion-slide-box>
