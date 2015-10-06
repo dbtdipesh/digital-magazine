@@ -106,7 +106,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'subscription-detail-page.html',
-         controller: 'DetailCtrl'
+         controller: 'MagazineCtrl'
       }
     }
   })
@@ -116,7 +116,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'open.html',
-         //controller: 'DetailCtrl' 
+         controller: 'MagazineCtrl' 
       }
     }
   })
