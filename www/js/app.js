@@ -39,7 +39,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   .state('app.search', {
     url: '/search',
     views: {
-      'searchContent': {
+      'menuContent': {
         templateUrl: 'search.html',
         
       }
@@ -48,7 +48,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
 .state('app.setting', {
     url: '/setting',
     views: {
-      'settingContent': {
+      'menuContent': {
         templateUrl: 'setting.html',
         
       }
@@ -58,7 +58,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   .state('app.profile', {
     url: '/profile',
     views: {
-      'profileContent': {
+      'menuContent': {
         templateUrl: 'profile.html',
         
       }
@@ -87,7 +87,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'subscriber-verification.html',
-         controller: 'DetailCtrl'
+        // controller: 'DetailCtrl'
       }
     }
   })
@@ -116,7 +116,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'open.html',
-         controller: 'DetailCtrl' 
+         //controller: 'DetailCtrl' 
       }
     }
   })
