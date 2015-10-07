@@ -66,8 +66,8 @@ var datModule=angular.module('starter.controllers', [])
          $scope.magazine=cdata.data; 
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
-           Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
-           //Book = ePub($scope.magazine.epub_file);
+           //Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
+           Book = ePub($scope.magazine.epub_file);
 
            Book.renderTo("area").then(function(){
               Book.setStyle("padding", "0 40px");
