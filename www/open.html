@@ -1,10 +1,10 @@
 
-<ion-view on-swipe-right="Book.prevPage();" on-swipe-left="Book.nextPage();">
-<ion-content >
+<ion-view on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()">
+<ion-content id="area">
 
-<div id="prev" onclick="Book.prevPage();" class="arrow">‹</div>
-<div id="area" ></div>
-<div id="next" onclick="Book.nextPage();"class="arrow">›</div>
+<div id="prev" onclick="Book.prevPage();" class="arrow">‹</div> 
+
+ <div id="next" onclick="Book.nextPage();"class="arrow">›</div> 
 
 
 </ion-view>

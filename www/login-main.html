@@ -9,19 +9,19 @@
           <img src="img/login-logo.png"/> 
 
           <label class="item item-input">
-          <input type="text" placeholder="Username or Email">
+          <input type="text" placeholder="Username or Email" ng-model='data.username'>
           </label>
 
         <br>
 
           <label class="item item-input">
-          <input type="password" placeholder="Password">
+          <input type="password" placeholder="Password" ng-model='data.password'>
           </label>
           
 
         <br>  
 
-          <a href="#app/magazine"><button class="button button-block button-positive">Login</button></a>
+          <!-- <a href="#app/magazine"> --><button class="button button-block button-positive" ng-click="login(data)">Login</button><!-- </a> -->
 
 
           <p><a href="#">Forget my Username or Password?</a></p>
