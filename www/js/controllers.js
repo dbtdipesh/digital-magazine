@@ -51,6 +51,9 @@ var datModule=angular.module('starter.controllers', [])
 })
 .controller('LoginCtrl',function($scope, $state, $ionicPopup, AuthService){
   $scope.data = {};
+
+  //$scope.data.username='D9yDxLZ0';
+  //$scope.data.password='A58o6s9w';
  
   $scope.login = function(data) {
     AuthService.login(data.username, data.password).then(function(authenticated) {
@@ -127,6 +130,9 @@ var datModule=angular.module('starter.controllers', [])
 
 
          $ionicLoading.hide();
+        }else{
+          alert('please logot and login again');
+          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
     });

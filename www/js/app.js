@@ -123,7 +123,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     }
   })
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  var token1=window.localStorage.getItem('tokenkey');
+  //alert(token1)
+  if(token1==undefined){
+    //alert('check'+token1);
+    $urlRouterProvider.otherwise('/login');
+  }
+  else{
+    $urlRouterProvider.otherwise('/app/magazine');
+  }
 })
 
 .config(['$httpProvider', function($httpProvider,$http) {

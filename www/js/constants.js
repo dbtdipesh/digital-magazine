@@ -9,3 +9,5 @@ angular.module('starter')
   admin: 'admin_role',
   public: 'public_role'
 });
+
+var url='http://95.211.75.201/~digitalbookshelf/dev/api/';

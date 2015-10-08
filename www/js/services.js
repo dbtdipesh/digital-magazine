@@ -1,13 +1,17 @@
 angular.module('magazines.services',[])
 .factory('MagazineFactory',['$http',function($http){
-    var url='http://95.211.75.201/~digitalbookshelf/dev/api/';
-   /* var headers = {
+
+    var tokenfull=window.localStorage.getItem('tokenkey');
+    token = tokenfull.split('.')[1];
+    //alert(token)
+    
+    var headers = {
                 'Access-Control-Allow-Origin' : '*',
                 'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
                 'Content-Type': 'application/x-www-form-urlencoded',
                 // 'Content-Type': 'application/json',
                 'Accept': 'application/json'
-            };*/
+            };
 
     return {
             getAllMagazines:function(){
@@ -19,7 +23,7 @@ angular.module('magazines.services',[])
             },
             getReleaseById:function(id){
             	//data={id:1};
-            	return $http.post(url+'get-release-by-id?token=AzEXshrS&id='+id);
+            	return $http.post(url+'get-release-by-id?token='+token+'&id='+id);
             },
 
             getAllReleasesByMagazineId:function(){
@@ -28,13 +32,18 @@ angular.module('magazines.services',[])
 
             	//var data={username:'kuber',password:'digital123'};
                 // var data =JSON.stringify({username: 'kuber',password:'digital123' });
-                 var data =JSON.stringify({magazine_id: '1'});
+                 var data =JSON.stringify({magazine_id: '1',token:token});
                 //return $http.post('http://localhost/attendance/api/login',data);
                var ret= $http({
-                            url: url+'get-all-releases-by-magazine-id?token=AzEXshrS&magazine_id=1',
+                            url: url+'get-all-releases-by-magazine-id?token='+token+'&magazine_id=1',
                             method: "get",
                             data: data,
-                           // headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
+                           //headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(res){
+                                return res;
+                            }).error(function(error){
+                                //reject('Login Failed.');
+                                return error;
                             });
 
                       //  $scope.$apply();
@@ -53,7 +62,7 @@ angular.module('magazines.services',[])
   var authToken;
  
   function loadUserCredentials() {
-    var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
+    var token = window.localStorage.getItem('tokenkey');
     if (token) {
       useCredentials(token);
     }
@@ -66,15 +75,18 @@ angular.module('magazines.services',[])
  
   function useCredentials(token) {
     username = token.split('.')[0];
+    //console.log(username);
     isAuthenticated = true;
     authToken = token;
+
+     role = USER_ROLES.admin
  
-    if (username == 'admin') {
-      role = USER_ROLES.admin
-    }
-    if (username == 'user') {
-      role = USER_ROLES.public
-    }
+    // if (username == 'admin') {
+    //   role = USER_ROLES.admin
+    // }
+    // if (username == 'user') {
+    //   role = USER_ROLES.public
+    // }
  
     // Set the token as header for your requests!
     $http.defaults.headers.common['X-Auth-Token'] = token;
@@ -89,14 +101,46 @@ angular.module('magazines.services',[])
   }
  
   var login = function(name, pw) {
+    console.log(url+'login?username='+name+'&password='+pw);
     return $q(function(resolve, reject) {
+         var data =JSON.stringify({username: name, password: pw});
+        var user;
+
+               $http({
+                            url: url+'login?username='+name+'&password='+pw,
+                            method: "get",
+                            data: data,
+                           // headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(res){
+
+                                console.log(res)
+
+                                if(res.type==undefined &&  res.status=='ok'){
+
+                                        user=res.data;
+                                        console.log(user[1]);
+                                        storeUserCredentials(name +'.'+ user.token);
+                                        resolve('Login success.');
+
+
+                                }else{
+                                    reject('Login Failed.');
+                                }
+
+                            });
+
+                            ////console.log(user);
+                            // return false;
+               
+              // alert(ret);
+/*
       if ((name == 'admin' && pw == '1') || (name == 'user' && pw == '1')) {
         // Make a request and receive your auth token from your server
         storeUserCredentials(name + '.yourServerToken');
         resolve('Login success.');
       } else {
         reject('Login Failed.');
-      }
+      }*/
     });
   };
  
