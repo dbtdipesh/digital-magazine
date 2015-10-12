@@ -1,4 +1,10 @@
 var Book;
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    screenwidth = w.innerWidth || e.clientWidth || g.clientWidth,
+    screenheight = w.innerHeight|| e.clientHeight|| g.clientHeight;
 var datModule=angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -68,6 +74,31 @@ var datModule=angular.module('starter.controllers', [])
   };
 
 })
+.controller('RegisterCtrl',function($scope, $state, $ionicPopup, AuthService){
+  $scope.data = {};
+
+ // $scope.data.username='D9yDxLZ0';
+ // $scope.data.password='A58o6s9w';
+ 
+  $scope.register = function(data) {
+    AuthService.register(data.email, data.fn,data.ln,data.contact).then(function(res) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Registration Successfull!',
+        template: 'Enjoy !!'
+      });
+      $state.go('app.magazine', {}, {reload: true});
+      console.log(res);
+      //$state.go('app.magazine', {}, {reload: true});
+      //$scope.setCurrentUsername(data.username);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Registration failed!',
+        template: 'Please check your credentials!'
+      });
+    });
+  };
+
+})
 .controller('SettingCtrl',function($scope, $state, $http, $ionicPopup, AuthService){
 
   $scope.token = window.localStorage.getItem('tokenkey');
@@ -77,8 +108,13 @@ var datModule=angular.module('starter.controllers', [])
     $state.go('login');
   };
 })
-.controller('MagazineCtrl',['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate){
+.controller('MagazineCtrl',
+  ['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate','$state'
+  ,function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state){
   $scope.i=0;
+
+  $scope.screenheight=screenheight;
+  $scope.screenwidth=screenwidth;
 
    $ionicLoading.show({
     content: 'Loading',
@@ -100,7 +136,7 @@ var datModule=angular.module('starter.controllers', [])
         Book.prevPage();
       };
 
-  MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
+  MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
        console.log(cdata);
        if(cdata.message=='Success'){
          $scope.magazine=cdata.data; 
@@ -117,7 +153,7 @@ var datModule=angular.module('starter.controllers', [])
          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
-    });
+    })
 }else{
 
   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
@@ -132,13 +168,20 @@ var datModule=angular.module('starter.controllers', [])
          $ionicLoading.hide();
         }else{
           alert('please logot and login again');
+
           $ionicLoading.hide();
+         // $state.go('login')
         }
         //console.log($scope.magazines);
+    }).error(function(err){
+      alert('err');
+     // $state.go('login');
+      $ionicLoading.hide();
+
     });
 
 }
-  
+   $ionicLoading.hide();
   /*$scope.magazines1 = [
     { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
     { title: 'Chill', id: 2, cover:'mag-02.jpg' ,subscribed:false},

@@ -99,6 +99,49 @@ angular.module('magazines.services',[])
     $http.defaults.headers.common['X-Auth-Token'] = undefined;
     window.localStorage.removeItem('tokenkey');
   }
+
+   var register = function(email, fn,ln,contact) {
+    console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
+    return $q(function(resolve, reject) {
+         var data ={email: email, first_name: fn,last_name: ln,magazine_id: 1};
+        var magazine_id='1';
+        var user;
+
+               $http({
+                            url: url+'register?email='+email+'&first_name='+fn+'&last_name='+ln+'&magazine_id='+magazine_id+'&contact_number='+contact,
+                            method: "post",
+                            data: data,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(res){
+
+                                console.log(res)
+
+                               if(res.status=='error'){
+                                    return res.message;
+                                }else{
+                                       user=res.data;
+                                        
+                                        storeUserCredentials(name +'.'+ user.token);
+                                        resolve('Login success.');
+                                }
+
+                                /*if(res.type==undefined &&  res.status=='ok'){
+
+                                        user=res.data;
+                                        console.log(user[1]);
+                                        storeUserCredentials(name +'.'+ user.token);
+                                        resolve('Login success.');
+*/
+
+                                /*}else{
+                                    // reject('Login Failed.');
+                                }*/
+
+                            });
+
+                          
+    });
+  };
  
   var login = function(name, pw) {
     console.log(url+'login?username='+name+'&password='+pw);
@@ -159,6 +202,7 @@ angular.module('magazines.services',[])
  
   return {
     login: login,
+    register: register,
     logout: logout,
     isAuthorized: isAuthorized,
     isAuthenticated: function() {return isAuthenticated;},

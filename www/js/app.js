@@ -71,7 +71,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     url: '/newRegister',
     
         templateUrl: 'registration-new-subscriber.html',
-       
+         controller:'RegisterCtrl'
     
   })
 
