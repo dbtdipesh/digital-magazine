@@ -9,7 +9,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+
+  window.addEventListener("orientationchange", function(){
+    //alert('Orientation changed to ' + screen.orientation);
+     screen.lockOrientation('portrait');
+});
+  
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
+     // screen.lockOrientation('portrait');
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
        cordova.plugins.Keyboard.disableScroll(true);
     }
@@ -17,6 +25,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       StatusBar.styleDefault();
     }
   });
+
+
 
 })
 .config(function($stateProvider, $urlRouterProvider) {

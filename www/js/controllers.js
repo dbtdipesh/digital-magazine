@@ -124,8 +124,8 @@ var datModule=angular.module('starter.controllers', [])
     showDelay: 0
   });
 //alert($stateParams.id)
-   if($stateParams.id!=undefined){
-     $scope.onSwipeLeft = function () {
+  if($stateParams.id!=undefined){
+     /* $scope.onSwipeLeft = function () {
         // Do whatever here to manage swipe left
         //alert("left");
         Book.nextPage();
@@ -134,21 +134,24 @@ var datModule=angular.module('starter.controllers', [])
         // Do whatever here to manage swipe left
         //alert("left");
         Book.prevPage();
-      };
+      };*/
 
   MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
-       console.log(cdata);
-       if(cdata.message=='Success'){
-         $scope.magazine=cdata.data; 
+       console.log(cdata.data);
+       if(cdata.data.message=='Success'){
+         $scope.magazine=cdata.data.data; 
+
+         console.log(cdata.data);
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
            //Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
-           Book = ePub($scope.magazine.epub_file);
+          /* Book = ePub($scope.magazine.epub_file);
 
            Book.renderTo("area").then(function(){
               Book.setStyle("padding", "0 40px");
-            });
+            });*/
           //Book.renderTo("area");
+
 
          $ionicLoading.hide();
         }
