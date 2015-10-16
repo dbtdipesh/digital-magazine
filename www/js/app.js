@@ -10,10 +10,18 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
 
-  window.addEventListener("orientationchange", function(){
+/*  window.addEventListener("orientationchange", function(){
     //alert('Orientation changed to ' + screen.orientation);
      screen.lockOrientation('portrait');
-});
+     $state.go($state.current, {}, {reload: true});
+});*/
+
+  window.addEventListener("orientationchange", function() {
+  // Announce the new orientation number
+  //alert(window.orientation);
+  //autoResize('iframe1');
+  // $state.go($state.current, {}, {reload: true});
+}, false);
   
 
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -72,7 +80,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'profile.html',
-        
+        controller:'ProfileCtrl'
       }
     }
   })
@@ -119,6 +127,16 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       'menuContent': {
         templateUrl: 'subscription-detail-page.html',
          controller: 'MagazineCtrl'
+      }
+    }
+  })
+
+   .state('app.about', {
+    url: '/about',
+    views: {
+      'menuContent': {
+        templateUrl: 'about.html',
+        
       }
     }
   })
@@ -180,33 +198,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     }
   });
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.filter('trustAsResourceUrl', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsResourceUrl(val);
+    };
+}])

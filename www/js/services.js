@@ -26,6 +26,15 @@ angular.module('magazines.services',[])
             	return $http.post(url+'get-release-by-id?token='+token+'&id='+id);
             },
 
+            getProfile:function(){
+              //data={id:1};
+              return $http({
+                      method: 'get',
+                      url: url+'get-user-detail-by-token?token='+token,
+                      header:headers
+                    });
+            },
+
             getAllReleasesByMagazineId:function(){
 
                    
@@ -161,7 +170,7 @@ angular.module('magazines.services',[])
                                 if(res.type==undefined &&  res.status=='ok'){
 
                                         user=res.data;
-                                        console.log(user[1]);
+                                        //console.log(user.token);
                                         storeUserCredentials(name +'.'+ user.token);
                                         resolve('Login success.');
 

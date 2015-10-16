@@ -5,6 +5,20 @@ var w = window,
     g = d.getElementsByTagName('body')[0],
     screenwidth = w.innerWidth || e.clientWidth || g.clientWidth,
     screenheight = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+  if (window.orientation == 0 || window.orientation == 180) {
+            // portrait
+            screenheight = screenheight;
+          } else if (window.orientation == 90 || window.orientation == -90) {
+            // landscape
+            screenheight = screenwidth;
+          }
+
+          // resize meta viewport
+          //$('meta[name=viewport]').attr('content', 'width='+screenwidth);
+
+
+
 var datModule=angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -108,9 +122,17 @@ var datModule=angular.module('starter.controllers', [])
     $state.go('login');
   };
 })
+.controller('ProfileCtrl',function($scope, $state, $http, $ionicPopup, MagazineFactory){
+
+  $scope.token = window.localStorage.getItem('tokenkey');
+   MagazineFactory.getProfile().then(function(res){
+       $scope.data=res.data.data
+       console.log(res.data.data)
+   })
+})
 .controller('MagazineCtrl',
-  ['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate','$state'
-  ,function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state){
+  ['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate','$state','$ionicPopup'
+  ,function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup){
   $scope.i=0;
 
   $scope.screenheight=screenheight;
@@ -123,6 +145,8 @@ var datModule=angular.module('starter.controllers', [])
     maxWidth: 200,
     showDelay: 0
   });
+
+
 //alert($stateParams.id)
   if($stateParams.id!=undefined){
      /* $scope.onSwipeLeft = function () {
@@ -137,11 +161,19 @@ var datModule=angular.module('starter.controllers', [])
       };*/
 
   MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
-       console.log(cdata.data);
+       //console.log(cdata);
        if(cdata.data.message=='Success'){
-         $scope.magazine=cdata.data.data; 
+         $scope.magazine=cdata.data.data;
 
-         console.log(cdata.data);
+         console.log(cdata.data)
+        
+         $scope.file={"file":cdata.data.data.extracted_file} 
+
+         $scope.filepath=$scope.file.file;
+
+
+         //$scope.path='http://95.211.75.201/~digitalbookshelf/dev/resources/uploads/releases/zipfiles/1444733784/index.html';
+        // console.log(cdata.data);
         // $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
            //Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
@@ -158,6 +190,38 @@ var datModule=angular.module('starter.controllers', [])
         //console.log($scope.magazines);
     })
 }else{
+
+
+  $scope.doRefresh = function() {
+
+
+
+     MagazineFactory.getAllReleasesByMagazineId().then(function(cdata){
+       //console.log(cdata);
+       if(cdata.data.message=='Succes'){
+         $scope.magazines=cdata.data.data;
+         $scope.loopcount=Math.ceil($scope.magazines.length/4);
+         //console.log($scope.loopcount);
+        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+
+
+        // $ionicLoading.hide();
+        }else{
+          
+          var alertPopup = $ionicPopup.alert({
+            title: 'Login failed!',
+            template: 'please logout and login again'
+          });
+          //$ionicLoading.hide();
+         // $state.go('login')
+        }
+    })
+     .finally(function() {
+       // Stop the ion-refresher from spinning
+       $scope.$broadcast('scroll.refreshComplete');
+       
+     });
+  };
 
   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
        console.log(cdata);
@@ -184,7 +248,7 @@ var datModule=angular.module('starter.controllers', [])
     });
 
 }
-   $ionicLoading.hide();
+   //$ionicLoading.hide();
   /*$scope.magazines1 = [
     { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
     { title: 'Chill', id: 2, cover:'mag-02.jpg' ,subscribed:false},

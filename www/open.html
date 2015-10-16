@@ -1,8 +1,10 @@
 
 <ion-view ><!-- on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" -->
-<ion-content >
+<ion-content scroll="true" overflow-scroll="true" class="iframe-issue" >
+
 <!-- {{magazine.extracted_file}}<div ng-include src="http://projectstorehouse.com/testmagazine/"</div> -->
-<iframe src="http://95.211.75.201/~digitalbookshelf/dev/resources/uploads/releases/zipfiles/1444733784/" width="100%" height="{{screenheight}}px"></iframe>
+<iframe ng-src="{{filepath   | trustAsResourceUrl}}" style="width:100%;height:100%"></iframe>
+
 
 <!-- <div id="prev" onclick="Book.prevPage();" class="arrow">‹</div> 
 
