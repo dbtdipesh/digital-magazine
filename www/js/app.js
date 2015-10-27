@@ -32,6 +32,10 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    /*$http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-magazines').then(function(data) {
+        alert("ok");
+      });*/
   });
 
 
@@ -53,6 +57,13 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     templateUrl: 'login-main.html',
     //controller: 'AppCtrl'
     controller: 'LoginCtrl'
+    
+  })
+  .state('forget', {
+    url: '/forget',
+    templateUrl: 'forget.html',
+    //controller: 'AppCtrl'
+    controller: 'ForgetCtrl'
     
   })
   .state('app.search', {
@@ -146,7 +157,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'open.html',
-         controller: 'MagazineCtrl' 
+         controller: 'MagazineCtrl'
       }
     }
   })
@@ -189,9 +200,9 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
         $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
       }
     }
- 
+    
     if (!AuthService.isAuthenticated()) {
-      if (next.name !== 'login' && next.name !== 'newRegister') {
+      if (next.name !== 'login' && next.name !== 'newRegister' && next.name !== 'forget') {
         event.preventDefault();
         $state.go('login');
       }

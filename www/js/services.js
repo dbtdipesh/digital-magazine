@@ -109,6 +109,42 @@ angular.module('magazines.services',[])
     window.localStorage.removeItem('tokenkey');
   }
 
+  var retrieve = function(email) {
+    console.log(url+'register?email='+email);
+    return $q(function(resolve, reject) {
+         var data ={email: email};
+        var magazine_id='1';
+        var user;
+
+               $http({
+                            url: url+'forgot-password?email='+email,
+                            method: "post",
+                            data: data,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(res){
+
+                                console.log(res);
+                                //return res;
+
+                               if(res.status=='error'){
+                                    //return res.message;
+                                    reject(res.message);
+                                    //alert(res.message);
+                                }else{
+                                       //user=res.data;
+                                      //return res.message;
+                                        //storeUserCredentials(name +'.'+ user.token);
+                                        resolve(res.message);
+                                      // alert(res.message);
+                                }
+
+                                
+                            });
+
+                          
+    });
+  };
+
    var register = function(email, fn,ln,contact) {
     console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
     return $q(function(resolve, reject) {
@@ -214,6 +250,7 @@ angular.module('magazines.services',[])
     register: register,
     logout: logout,
     isAuthorized: isAuthorized,
+    retrieve: retrieve,
     isAuthenticated: function() {return isAuthenticated;},
     username: function() {return username;},
     role: function() {return role;}

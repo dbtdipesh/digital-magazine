@@ -88,6 +88,32 @@ var datModule=angular.module('starter.controllers', [])
   };
 
 })
+.controller('ForgetCtrl',function($scope, $state, $ionicPopup, AuthService){
+  $scope.data = {};
+
+  //$scope.data.username='D9yDxLZ0';
+  //$scope.data.password='A58o6s9w';
+ 
+  $scope.retrieve = function(data) {
+    AuthService.retrieve(data.username).then(function(res) {
+      //$state.go('app.magazine', {}, {reload: true});
+      //$scope.setCurrentUsername(data.username);
+      var alertPopup = $ionicPopup.alert({
+        title: 'Successfull!',
+        template: res
+      });
+      $state.go('login', {}, {reload: true});
+     // $state.go('app.magazine', {}, {reload: true});
+      console.log(res);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Failed!',
+        template: err
+      });
+    });
+  };
+
+})
 .controller('RegisterCtrl',function($scope, $state, $ionicPopup, AuthService){
   $scope.data = {};
 
