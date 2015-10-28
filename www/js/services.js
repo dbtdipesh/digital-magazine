@@ -37,7 +37,7 @@ angular.module('magazines.services',[])
 
             getAllReleasesByMagazineId:function(){
 
-                   
+                   console.log(url+'get-all-releases-by-magazine-id?token='+token+'&magazine_id=1');
 
             	//var data={username:'kuber',password:'digital123'};
                 // var data =JSON.stringify({username: 'kuber',password:'digital123' });
@@ -166,7 +166,7 @@ angular.module('magazines.services',[])
                                 }else{
                                        user=res.data;
                                         
-                                        storeUserCredentials(name +'.'+ user.token);
+                                        storeUserCredentials(user.user_name +'.'+ user.token);
                                         resolve('Login success.');
                                 }
 
@@ -207,7 +207,7 @@ angular.module('magazines.services',[])
 
                                         user=res.data;
                                         //console.log(user.token);
-                                        storeUserCredentials(name +'.'+ user.token);
+                                        storeUserCredentials(user.user_name +'.'+ user.token);
                                         resolve('Login success.');
 
 

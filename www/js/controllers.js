@@ -95,6 +95,7 @@ var datModule=angular.module('starter.controllers', [])
   //$scope.data.password='A58o6s9w';
  
   $scope.retrieve = function(data) {
+    if(data.username){
     AuthService.retrieve(data.username).then(function(res) {
       //$state.go('app.magazine', {}, {reload: true});
       //$scope.setCurrentUsername(data.username);
@@ -111,7 +112,14 @@ var datModule=angular.module('starter.controllers', [])
         template: err
       });
     });
+    }else{
+  var alertPopup = $ionicPopup.alert({
+        title: 'Failed',
+        template: 'Please check your credentials!'
+      });
+}
   };
+
 
 })
 .controller('RegisterCtrl',function($scope, $state, $ionicPopup, AuthService){
@@ -142,6 +150,7 @@ var datModule=angular.module('starter.controllers', [])
 .controller('SettingCtrl',function($scope, $state, $http, $ionicPopup, AuthService){
 
   $scope.token = window.localStorage.getItem('tokenkey');
+  alert($scope.token)
    $scope.logout = function() {
 
     AuthService.logout();
