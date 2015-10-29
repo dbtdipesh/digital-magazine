@@ -150,7 +150,6 @@ var datModule=angular.module('starter.controllers', [])
 .controller('SettingCtrl',function($scope, $state, $http, $ionicPopup, AuthService){
 
   $scope.token = window.localStorage.getItem('tokenkey');
-  alert($scope.token)
    $scope.logout = function() {
 
     AuthService.logout();
@@ -194,7 +193,7 @@ var datModule=angular.module('starter.controllers', [])
         //alert("left");
         Book.prevPage();
       };*/
-
+ $ionicLoading.hide();
   MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
        //console.log(cdata);
        if(cdata.data.message=='Success'){

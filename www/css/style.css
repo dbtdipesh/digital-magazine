@@ -339,3 +339,8 @@ div.color-red a:first-child img
 .arrow:active {
   color: #000;
 }
+
+.iframe-placeholder
+{
+   background: url('../img/loading.gif')center center no-repeat;
+}

@@ -3,7 +3,7 @@ angular.module('magazines.services',[])
 
     var tokenfull=window.localStorage.getItem('tokenkey');
     token = tokenfull.split('.')[1];
-    //alert(token)
+    
     
     var headers = {
                 'Access-Control-Allow-Origin' : '*',
@@ -22,11 +22,15 @@ angular.module('magazines.services',[])
      			return $http.post(url+'get-all-magazines');
             },
             getReleaseById:function(id){
+              var tokenfull=window.localStorage.getItem('tokenkey');
+    token = tokenfull.split('.')[1];
             	//data={id:1};
             	return $http.post(url+'get-release-by-id?token='+token+'&id='+id);
             },
 
             getProfile:function(){
+              var tokenfull=window.localStorage.getItem('tokenkey');
+            token = tokenfull.split('.')[1];
               //data={id:1};
               return $http({
                       method: 'get',
@@ -36,6 +40,8 @@ angular.module('magazines.services',[])
             },
 
             getAllReleasesByMagazineId:function(){
+              var tokenfull=window.localStorage.getItem('tokenkey');
+    token = tokenfull.split('.')[1];
 
                    console.log(url+'get-all-releases-by-magazine-id?token='+token+'&magazine_id=1');
 
@@ -206,7 +212,7 @@ angular.module('magazines.services',[])
                                 if(res.type==undefined &&  res.status=='ok'){
 
                                         user=res.data;
-                                        //console.log(user.token);
+                                        console.log(user.token);
                                         storeUserCredentials(user.user_name +'.'+ user.token);
                                         resolve('Login success.');
 
