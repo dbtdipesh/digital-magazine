@@ -19,9 +19,16 @@
     "cordova-plugin-console",
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
-    "com.ionic.keyboard"
+    "com.ionic.keyboard",
+    "org.apache.cordova.file-transfer",
+    "org.apache.cordova.device",
+    {
+      "locator": "https://github.com/ashishanautiyal/Unzip-PhoneGap--Plugin.git",
+      "id": "com.phonegap.plugin.ExtractZipFile"
+    }
   ],
   "cordovaPlatforms": [
-    "android"
+    "android",
+    "ios"
   ]
 }

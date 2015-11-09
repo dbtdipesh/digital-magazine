@@ -13,13 +13,13 @@ var w = window,
             // landscape
             screenheight = screenwidth;
           }
-
+//alert(screenheight);
           // resize meta viewport
           //$('meta[name=viewport]').attr('content', 'width='+screenwidth);
 
 
 
-var datModule=angular.module('starter.controllers', [])
+var datModule=angular.module('starter.controllers',[])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -164,9 +164,86 @@ var datModule=angular.module('starter.controllers', [])
        console.log(res.data.data)
    })
 })
-.controller('MagazineCtrl',
-  ['$scope','MagazineFactory','$ionicLoading','$stateParams','$ionicSlideBoxDelegate','$state','$ionicPopup'
-  ,function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup){
+.controller('OfflineMagazineCtrl',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
+   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+       console.log(cdata);
+       if(cdata.message=='Succes'){
+
+        var magazines={};
+
+       cdata.data.forEach(function(entry) {
+        console.log(entry.id)
+          window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+            console.log(entry.id)
+        fs.root.getDirectory(
+            "Magazine/"+entry.id,
+            {
+                create: false
+            },
+            function(dirEntry) {
+                dirEntry.getFile(
+                    'index.html', 
+                    {
+                        create: false, 
+                        exclusive: false
+                    }, 
+                    function gotFileEntry(fe) {
+                        $ionicLoading.hide();
+                        console.log(entry.id)
+                        //$scope.filepath = fe.toURL();
+                        $scope.offlinemagazine.push(entry);
+                        console.log(entry)
+                        $scope.downloaded=true;
+                        //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
+                        /*console.log($scope.zipFile);
+                        console.log("Extracting "+ $scope.zipFile);
+                        var ZipClient = new ExtractZipFilePlugin();
+                        ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
+                        //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
+                        $scope.filepath*/
+                    }, 
+                    function(error) {
+                        $ionicLoading.hide();
+                         $scope.downloaded=false;
+                        console.log("Error getting file");
+                    }
+                );
+            }
+        );
+    },
+    function() {
+        $ionicLoading.hide();
+         $scope.downloaded=false;
+        console.log("Error requesting filesystem");
+    });
+          
+
+       });
+       
+        //console.log(magazines);
+         //$scope.offlinemagazine=magazines;//JSON.stringify(magazines);
+         console.log($scope.offlinemagazine)
+         $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
+         //console.log(cdata.data);
+        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+
+
+         
+        }else{
+          alert('please logot and login again');
+
+         // $ionicLoading.hide();
+         // $state.go('login')
+        }
+        //console.log($scope.magazines);
+    }).error(function(err){
+      alert('err');
+     // $state.go('login');
+     // $ionicLoading.hide();
+
+    });
+})
+.controller('MagazineCtrl',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
   $scope.i=0;
 
   $scope.screenheight=screenheight;
@@ -180,19 +257,7 @@ var datModule=angular.module('starter.controllers', [])
     showDelay: 0
   });
 
-
-//alert($stateParams.id)
   if($stateParams.id!=undefined){
-     /* $scope.onSwipeLeft = function () {
-        // Do whatever here to manage swipe left
-        //alert("left");
-        Book.nextPage();
-      };
-      $scope.onSwipeRight = function () {
-        // Do whatever here to manage swipe left
-        //alert("left");
-        Book.prevPage();
-      };*/
  $ionicLoading.hide();
   MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
        //console.log(cdata);
@@ -203,7 +268,209 @@ var datModule=angular.module('starter.controllers', [])
         
          $scope.file={"file":cdata.data.data.extracted_file} 
 
-         $scope.filepath=$scope.file.file;
+         $scope.onlinepath=$scope.file.file;
+
+         var statusDom; 
+         var url=cdata.data.data.zip_file;
+
+
+         var filename = url.substring(url.lastIndexOf('/')+1);
+        // $scope.filepath='Magazine/index.html';
+         //console.log($scope.filepath);
+
+        /* File extStore = Environment.getExternalStorageDirectory();
+          File myFile = new File(extStore.getAbsolutePath() + "/Magazine/"+$stateParams.id+'/'+index.html);
+
+          if(myFile.exists()){
+              alert('exists')
+              $scope.downloaded=true;
+          }else{
+            $scope.downloaded=false;
+          }*/
+
+         /* $cordovaFile.checkDir(cordova.file.externalRootDirectory, "/Magazine/"+$stateParams.id+'/'+index.html)
+            .then(function (success) {
+              alert('exists')
+              $scope.downloaded=true;
+            }, function (error) {
+              $scope.downloaded=false;
+            });*/
+          $scope.downloaded=false;
+          
+
+         $scope.download = function() {
+            $ionicLoading.show({
+              template: 'Downloading...'
+            });
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+                fs.root.getDirectory(
+                    "Magazine/"+$stateParams.id,
+                    {
+                        create: true
+                    },
+                    function(dirEntry) {
+                        dirEntry.getFile(
+                            filename, 
+                            {
+                                create: true, 
+                                exclusive: false
+                            }, 
+                            function gotFileEntry(fe) {
+                                var p = fe.toURL();
+                                fe.remove();
+                                ft = new FileTransfer();
+                               /* statusDom = document.querySelector('#status');
+                                ft.onprogress = function(progressEvent) {
+                                    if (progressEvent.lengthComputable) {
+                                      var perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+                                      statusDom.innerHTML = perc + "% loaded...";
+                                    } else {
+                                      if(statusDom.innerHTML == "") {
+                                        statusDom.innerHTML = "Loading";
+                                      } else {
+                                        statusDom.innerHTML += ".";
+                                      }
+                                    }
+                                  };*/
+
+                                ft.download(
+                                    encodeURI(url),
+                                    p,
+                                    function(entry) {
+                                        $ionicLoading.hide();
+                                        $scope.zipFile = entry.toURL();
+                                        console.log($scope.zipFile);
+                                        $ionicLoading.show({
+                                            template: 'Installing...'
+                                          });
+
+                                        console.log("Extracting "+ $scope.zipFile);
+                                        var ZipClient = new ExtractZipFilePlugin();
+                                        ZipClient.extractFile('sdcard/Magazine/'+$stateParams.id+'/'+filename, extractOK, extractError);
+                                        $scope.filepath = fe.toURL();
+                                        $ionicLoading.hide();
+                                         $scope.downloaded=true;
+                                    },
+                                    function(error) {
+                                        $ionicLoading.hide();
+                                        $scope.downloaded=false;
+                                        alert("Download Error Source -> " + error.source);
+                                    },
+                                    false,
+                                    null
+                                );
+                            }, 
+                            function() {
+                                $ionicLoading.hide();
+                                $scope.downloaded=false;
+                                console.log("Get file failed");
+                            }
+                        );
+                    }
+                );
+            },
+            function() {
+                $ionicLoading.hide();
+                $scope.downloaded=false;
+                console.log("Request for filesystem failed");
+            });
+}
+function extractOK(status)
+{
+    console.log("extractOK");
+}
+
+function extractError(error)
+{ 
+    console.log("extractError "+error);
+}
+
+   window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+        fs.root.getDirectory(
+            "Magazine/"+$stateParams.id,
+            {
+                create: false
+            },
+            function(dirEntry) {
+                dirEntry.getFile(
+                    'index.html', 
+                    {
+                        create: false, 
+                        exclusive: false
+                    }, 
+                    function gotFileEntry(fe) {
+                        $ionicLoading.hide();
+                        $scope.filepath = fe.toURL();
+                        $scope.downloaded=true;
+                        //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
+                        /*console.log($scope.zipFile);
+                        console.log("Extracting "+ $scope.zipFile);
+                        var ZipClient = new ExtractZipFilePlugin();
+                        ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
+                        //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
+                        $scope.filepath*/
+                    }, 
+                    function(error) {
+                        $ionicLoading.hide();
+                         $scope.downloaded=false;
+                        console.log("Error getting file");
+                    }
+                );
+            }
+        );
+    },
+    function() {
+        $ionicLoading.hide();
+         $scope.downloaded=false;
+        console.log("Error requesting filesystem");
+    });
+
+
+
+
+
+         /*JSZipUtils.getBinaryContent('resources/Archive.zip', function(err, data) {
+          if(err) {
+            throw err; // or handle err
+            
+          }
+         var zip = new JSZip(data);
+          //console.log(zip.file('test.html').asText());
+          var text=zip.file('index.html').asText();
+          console.log(text);
+          text.replace('javascript/','js/');
+          $scope.content=text;
+          console.log(text)
+          //$('#test').html(index);
+        });*/
+
+
+
+
+      /*  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+      filesystem = fs;
+      zipPath = fs.root.fullPath + filename
+      resourceURL = zipPath;
+      var fileTransfer = new FileTransfer();
+
+      fileTransfer.download(url, zipPath, function (entry) {
+               console.log(entry.fullPath+"  Hello!"); // entry is fileEntry object
+               
+               var loader = new ZipLoader(entry.fullPath);
+                $.each(loader.getEntries(entry.fullPath), function(i, entry) {
+                console.log("Name: "+ entry.name()+ " Size: "+ entry.size+ " is Directory: "+ entry.isDirectory());
+                });
+
+                }, function (error) {
+                    console.log("Some error");
+              });
+
+        }, function (error) {
+               console.log("Some error");
+      });
+*/
+
+
 
 
          //$scope.path='http://95.211.75.201/~digitalbookshelf/dev/resources/uploads/releases/zipfiles/1444733784/index.html';
@@ -305,7 +572,7 @@ var datModule=angular.module('starter.controllers', [])
   ];
 
   $scope.loopcount2=Math.ceil($scope.magazines2.length/4);*/
-}])
+})
 /*.controller('DetailCtrl', function($scope, $stateParams,MagazineFactory,$ionicLoading) {
 
 //console.log($stateParams.id);
@@ -411,4 +678,98 @@ datModule.controller('MagazineCtrl1', function ($scope, $state,$http,$ionicLoadi
 
 
 
-*/
+*//*
+.controller("FileController", function($scope, $ionicLoading,$q) {
+ 
+console.log('file controller')
+$scope.download = function() {
+  console.log('download called')
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+        fs.root.getDirectory(
+            "ExampleProject",
+            {
+                create: true
+            },
+            function(dirEntry) {
+                dirEntry.getFile(
+                    "test.png", 
+                    {
+                        create: true, 
+                        exclusive: false
+                    }, 
+                    function gotFileEntry(fe) {
+                        var p = fe.toURL();
+                        fe.remove();
+                        ft = new FileTransfer();
+                        ft.download(
+                            encodeURI("https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/2/000/058/15a/33b3b0e.jpg"),
+                            p,
+                            function(entry) {
+                                $ionicLoading.hide();
+                                $scope.imgFile = entry.toURL();
+                            },
+                            function(error) {
+                                $ionicLoading.hide();
+                                alert("Download Error Source -> " + error.source);
+                            },
+                            false,
+                            null
+                        );
+                    }, 
+                    function() {
+                        $ionicLoading.hide();
+                        console.log("Get file failed");
+                    }
+                );
+            }
+        );
+    },
+    function() {
+        $ionicLoading.hide();
+        console.log("Request for filesystem failed");
+    });
+}
+ 
+    
+
+$scope.load = function() {
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+        fs.root.getDirectory(
+            "ExampleProject",
+            {
+                create: false
+            },
+            function(dirEntry) {
+                dirEntry.getFile(
+                    "test.png", 
+                    {
+                        create: false, 
+                        exclusive: false
+                    }, 
+                    function gotFileEntry(fe) {
+                        $ionicLoading.hide();
+                        $scope.imgFile = fe.toURL();
+                    }, 
+                    function(error) {
+                        $ionicLoading.hide();
+                        console.log("Error getting file");
+                    }
+                );
+            }
+        );
+    },
+    function() {
+        $ionicLoading.hide();
+        console.log("Error requesting filesystem");
+    });
+}
+
+
+
+})*/

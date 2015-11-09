@@ -33,9 +33,20 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       StatusBar.styleDefault();
     }
 
-    /*$http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-magazines').then(function(data) {
-        alert("ok");
-      });*/
+   
+ window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+                fs.root.getDirectory(
+                    "Magazine/",
+                    {
+                        create: true
+                    }
+                );
+            },
+            function() {
+                
+            });
+
+
   });
 
 
@@ -81,6 +92,16 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       'menuContent': {
         templateUrl: 'setting.html',
         controller:'SettingCtrl'
+        
+      }
+    }
+  })
+.state('app.contacts', {
+    url: '/contacts',
+    views: {
+      'menuContent': {
+        templateUrl: 'contacts.html',
+        controller:'FileController'
         
       }
     }
@@ -132,6 +153,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       }
     }
   })
+  .state('app.downloaded', {
+    url: '/downloaded',
+    views: {
+      'menuContent': {
+        templateUrl: 'downloaded-magazine-page.html',
+        controller: 'OfflineMagazineCtrl'
+      }
+    }
+  })
    .state('app.detail', {
     url: '/detail/{id}',
     views: {
@@ -157,6 +187,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     views: {
       'menuContent': {
         templateUrl: 'open.html',
+         controller: 'MagazineCtrl'
+      }
+    }
+  })
+    .state('app.openonline', {
+    url: '/openonline/{id}',
+    views: {
+      'menuContent': {
+        templateUrl: 'openonline.html',
          controller: 'MagazineCtrl'
       }
     }
