@@ -165,11 +165,16 @@ var datModule=angular.module('starter.controllers',[])
    })
 })
 .controller('OfflineMagazineCtrl',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
-   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+   $scope.doRefresh = function() {
+
+ MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
        console.log(cdata);
        if(cdata.message=='Succes'){
 
-        var magazines={};
+
+        
+
+        var magazines=[];
 
        cdata.data.forEach(function(entry) {
         console.log(entry.id)
@@ -191,7 +196,7 @@ var datModule=angular.module('starter.controllers',[])
                         $ionicLoading.hide();
                         console.log(entry.id)
                         //$scope.filepath = fe.toURL();
-                        $scope.offlinemagazine.push(entry);
+                        magazines.push(entry);
                         console.log(entry)
                         $scope.downloaded=true;
                         //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
@@ -220,10 +225,98 @@ var datModule=angular.module('starter.controllers',[])
 
        });
        
-        //console.log(magazines);
-         //$scope.offlinemagazine=magazines;//JSON.stringify(magazines);
-         console.log($scope.offlinemagazine)
-         $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
+        console.log(magazines);
+         $scope.offlinemagazine=magazines;//JSON.stringify(magazines);
+        // console.log($scope.offlinemagazine)
+        // $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
+         //console.log(cdata.data);
+        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+
+
+         
+        }else{
+          alert('please logot and login again');
+
+         // $ionicLoading.hide();
+         // $state.go('login')
+        }
+        //console.log($scope.magazines);
+    }).error(function(err){
+      alert('err');
+     // $state.go('login');
+     // $ionicLoading.hide();
+
+    });
+
+     $scope.$broadcast('scroll.refreshComplete'); 
+  };
+
+
+
+
+  
+   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+       console.log(cdata);
+       if(cdata.message=='Succes'){
+
+
+        
+
+        var magazines=[];
+
+       cdata.data.forEach(function(entry) {
+        console.log(entry.id)
+          window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+            console.log(entry.id)
+        fs.root.getDirectory(
+            "Magazine/"+entry.id,
+            {
+                create: false
+            },
+            function(dirEntry) {
+                dirEntry.getFile(
+                    'index.html', 
+                    {
+                        create: false, 
+                        exclusive: false
+                    }, 
+                    function gotFileEntry(fe) {
+                        $ionicLoading.hide();
+                        console.log(entry.id)
+                        //$scope.filepath = fe.toURL();
+                        magazines.push(entry);
+                        console.log(entry)
+                        $scope.downloaded=true;
+                        //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
+                        /*console.log($scope.zipFile);
+                        console.log("Extracting "+ $scope.zipFile);
+                        var ZipClient = new ExtractZipFilePlugin();
+                        ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
+                        //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
+                        $scope.filepath*/
+                    }, 
+                    function(error) {
+                        $ionicLoading.hide();
+                         $scope.downloaded=false;
+                        console.log("Error getting file");
+                    }
+                );
+            }
+        );
+    },
+    function() {
+        $ionicLoading.hide();
+         $scope.downloaded=false;
+        console.log("Error requesting filesystem");
+    });
+          
+
+       });
+       
+        console.log(magazines);
+         $scope.offlinemagazine=magazines;//JSON.stringify(magazines);
+        // console.log($scope.offlinemagazine)
+        // $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
          //console.log(cdata.data);
         $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
 
@@ -403,12 +496,12 @@ function extractError(error)
                         $scope.filepath = fe.toURL();
                         $scope.downloaded=true;
                         //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
-                        /*console.log($scope.zipFile);
+                        console.log($scope.zipFile);
                         console.log("Extracting "+ $scope.zipFile);
                         var ZipClient = new ExtractZipFilePlugin();
                         ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
                         //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
-                        $scope.filepath*/
+                        $scope.filepath
                     }, 
                     function(error) {
                         $ionicLoading.hide();

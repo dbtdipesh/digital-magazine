@@ -25,6 +25,10 @@
     {
       "locator": "https://github.com/ashishanautiyal/Unzip-PhoneGap--Plugin.git",
       "id": "com.phonegap.plugin.ExtractZipFile"
+    },
+    {
+      "locator": "https://github.com/brodysoft/Cordova-SQLitePlugin.git",
+      "id": "cordova-sqlite-storage"
     }
   ],
   "cordovaPlatforms": [

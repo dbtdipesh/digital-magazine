@@ -3,9 +3,15 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines.services'])
 
-.run(function($ionicPlatform) {
+var db;
+var shortName = 'WebSqlDB';
+var version = '1.0';
+var displayName = 'WebSqlDB';
+var maxSize = 65535;
+var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines.services','ngCordova'])
+
+.run(function($ionicPlatform, $ionicPopup,$cordovaSQLite,MagazineFactory) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,14 +22,13 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
      $state.go($state.current, {}, {reload: true});
 });*/
 
-  window.addEventListener("orientationchange", function() {
+/*  window.addEventListener("orientationchange", function() {
   // Announce the new orientation number
   //alert(window.orientation);
   //autoResize('iframe1');
   // $state.go($state.current, {}, {reload: true});
-}, false);
+}, false);*/
   
-
     if(window.cordova && window.cordova.plugins.Keyboard) {
      // screen.lockOrientation('portrait');
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -33,6 +38,69 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
       StatusBar.styleDefault();
     }
 
+  
+    if(window.Connection) {
+
+                if(navigator.connection.type == Connection.NONE) {
+                    $ionicPopup.confirm({
+                        title: "Internet Not Connected",
+                        content: "The magazine list may be older."
+                    })
+                    .then(function(result) {
+                        if(!result) {
+                            ionic.Platform.exitApp();
+                        }
+                    });
+                }else{
+                   db = $cordovaSQLite.openDB("my.db");
+                    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS magazines(magazine_id INTEGER NOT_NULL PRIMARY KEY, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL").then(function(res){
+                          console.log(res);
+                    });
+
+                      /*console.log('start')
+                   var insertquery = "INSERT INTO magazines (magazine_id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                                  $cordovaSQLite.execute(db, insertquery, [1, 'test','test','test','test','test','test','test','test','test']).then(function(res) {
+                                      console.log("INSERT ID -> " + res.insertId);
+                                  }, function (err) {
+                                      console.error(err);
+                                  });
+                  console.log('end')*/
+
+               MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+                 //console.log(cdata);
+
+                 if(cdata.message=='Succes'){
+                   
+                   cdata.data.forEach(function(entry) {
+
+                      //console.log(entry.id)
+                     var selquery = "SELECT * FROM magazines WHERE magazine_id = ?";
+                        $cordovaSQLite.execute(db, selquery, [entry.id]).then(function(res) {
+                            if(res.rows.length > 0) {
+                                console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
+                            } else {
+                                console.log("No results found");
+
+                                  var insertquery = "INSERT INTO magazines (magazine_id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                                  $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,entry.image,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file]).then(function(res) {
+                                      console.log("INSERT ID -> " + res.insertId);
+                                  }, function (err) {
+                                      console.error(err);
+                                  });
+                            }
+                        }, function (err) {
+                            console.error(err);
+                        });  
+                    });
+
+                   }
+                 });
+               
+
+                 
+                }
+            }
+          
    
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
                 fs.root.getDirectory(
@@ -47,7 +115,40 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
             });
 
 
+
+
+
   });
+
+
+/* if (!window.openDatabase) {
+   // not all mobile devices support databases  if it does not, the
+//following alert will display
+   // indicating the device will not be albe to run this application
+   alert('Databases are not supported in this browser.');
+   return;
+ }
+
+ // this is called when an error happens in a transaction
+function errorHandler(transaction, error) {
+   alert('Error: ' + error.message + ' code: ' + error.code);
+
+}
+
+// this is called when a successful transaction happens
+function successCallBack() {
+   //alert("DEBUGGING: success");
+
+}
+function nullHandler(){};
+
+  //alert("DEBUGGING: we are in the run() function");
+  db = openDatabase(shortName, version, displayName,maxSize);
+
+ db.transaction(function(tx){
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Magazines(magazine_id INTEGER NOT_NULL PRIMARY KEY, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL)',
+[],nullHandler,errorHandler);
+ },errorHandler,successCallBack);*/
 
 
 
