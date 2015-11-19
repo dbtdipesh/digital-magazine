@@ -30,11 +30,11 @@
         <li>{{magazine.introduction}}</li>
       </ul>
 
-<a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="downloaded==false">Download Magazine</a>
-<a class="button button-balanced" href="#app/openonline/{{magazine.id}}" ng-if="downloaded==false">Open Magazine</a>
+<a class="button button-balanced" ng-click="download({{magazine.magazine_id}})" ng-if="downloaded==false">Download Magazine</a>
+<a class="button button-balanced" href="#app/openonline/{{magazine.magazine_id}}" ng-if="downloaded==false">Open Magazine</a>
 <div id='status'></div>
 <!-- <a class="button button-balanced" ng-click="load({{magazine.id}})">Op Magazine</a> -->
-      <a class="button button-balanced" href="#app/open/{{magazine.id}}" ng-if="downloaded">Open Magazine</a>
+      <a class="button button-balanced" href="#app/open/{{magazine.magazine_id}}" ng-if="downloaded">Open Magazine</a>
 
 
 

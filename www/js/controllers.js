@@ -164,24 +164,24 @@ var datModule=angular.module('starter.controllers',[])
        console.log(res.data.data)
    })
 })
-.controller('OfflineMagazineCtrl',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
+.controller('OfflineMagazineCtrl',function($scope,Releases,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
    $scope.doRefresh = function() {
 
- MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+ Releases.all().then(function(cdata){
        console.log(cdata);
-       if(cdata.message=='Succes'){
+       if(cdata.length>0){
 
 
         
 
         var magazines=[];
 
-       cdata.data.forEach(function(entry) {
-        console.log(entry.id)
+       cdata.forEach(function(entry) {
+        console.log(entry.magazine_id)
           window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-            console.log(entry.id)
+            console.log(entry.magazine_id)
         fs.root.getDirectory(
-            "Magazine/"+entry.id,
+            "Magazine/"+entry.magazine_id,
             {
                 create: false
             },
@@ -194,7 +194,7 @@ var datModule=angular.module('starter.controllers',[])
                     }, 
                     function gotFileEntry(fe) {
                         $ionicLoading.hide();
-                        console.log(entry.id)
+                        console.log(entry.magazine_id)
                         //$scope.filepath = fe.toURL();
                         magazines.push(entry);
                         console.log(entry)
@@ -241,11 +241,6 @@ var datModule=angular.module('starter.controllers',[])
          // $state.go('login')
         }
         //console.log($scope.magazines);
-    }).error(function(err){
-      alert('err');
-     // $state.go('login');
-     // $ionicLoading.hide();
-
     });
 
      $scope.$broadcast('scroll.refreshComplete'); 
@@ -255,21 +250,19 @@ var datModule=angular.module('starter.controllers',[])
 
 
   
-   MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+   Releases.all().then(function(cdata){
        console.log(cdata);
-       if(cdata.message=='Succes'){
+       if(cdata.length>0){
 
-
-        
 
         var magazines=[];
 
-       cdata.data.forEach(function(entry) {
+       cdata.forEach(function(entry) {
         console.log(entry.id)
           window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-            console.log(entry.id)
+            console.log(entry.magazine_id)
         fs.root.getDirectory(
-            "Magazine/"+entry.id,
+            "Magazine/"+entry.magazine_id,
             {
                 create: false
             },
@@ -282,7 +275,7 @@ var datModule=angular.module('starter.controllers',[])
                     }, 
                     function gotFileEntry(fe) {
                         $ionicLoading.hide();
-                        console.log(entry.id)
+                        console.log(entry.magazine_id)
                         //$scope.filepath = fe.toURL();
                         magazines.push(entry);
                         console.log(entry)
@@ -323,20 +316,18 @@ var datModule=angular.module('starter.controllers',[])
 
          
         }else{
-          alert('please logot and login again');
+          alert('please logout and login again');
 
          // $ionicLoading.hide();
          // $state.go('login')
         }
         //console.log($scope.magazines);
-    }).error(function(err){
-      alert('err');
-     // $state.go('login');
-     // $ionicLoading.hide();
-
     });
 })
-.controller('MagazineCtrl',function($scope,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform){
+.controller('MagazineCtrl',function($scope,MagazineFactory,Releases,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform,$cordovaSQLite){
+   
+
+
   $scope.i=0;
 
   $scope.screenheight=screenheight;
@@ -352,22 +343,23 @@ var datModule=angular.module('starter.controllers',[])
 
   if($stateParams.id!=undefined){
  $ionicLoading.hide();
-  MagazineFactory.getReleaseById($stateParams.id).then(function(cdata){
-       //console.log(cdata);
-       if(cdata.data.message=='Success'){
-         $scope.magazine=cdata.data.data;
+  Releases.get($stateParams.id).then(function(cdata){
+       console.log(cdata.length);
+       if(cdata.magazine_id){
+         $scope.magazine=cdata;
 
-         console.log(cdata.data)
+         //console.log(cdata)
         
-         $scope.file={"file":cdata.data.data.extracted_file} 
+         $scope.file={"file":cdata.extracted_file} 
 
          $scope.onlinepath=$scope.file.file;
 
          var statusDom; 
-         var url=cdata.data.data.zip_file;
+         var url=cdata.zip_file;
 
 
          var filename = url.substring(url.lastIndexOf('/')+1);
+         //console.log(filename);
         // $scope.filepath='Magazine/index.html';
          //console.log($scope.filepath);
 
@@ -467,16 +459,16 @@ var datModule=angular.module('starter.controllers',[])
                 $scope.downloaded=false;
                 console.log("Request for filesystem failed");
             });
-}
+};
 function extractOK(status)
 {
     console.log("extractOK");
-}
+};
 
 function extractError(error)
 { 
     console.log("extractError "+error);
-}
+};
 
    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
         fs.root.getDirectory(
@@ -588,12 +580,127 @@ function extractError(error)
 
   $scope.doRefresh = function() {
 
+    if(window.Connection) {
+
+                if(navigator.connection.type == Connection.NONE) {
+                    $ionicPopup.confirm({
+                        title: "Internet Not Connected",
+                        content: "The magazine list may be older."
+                    })
+                    .then(function(result) {
+                        if(!result) {
+                            ionic.Platform.exitApp();
+                        }
+                    });
+                }else{
+               
+
+               MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+                 //console.log(cdata);
+                // alert('test');
+
+                 if(cdata.message=='Succes'){
+                    var selquery = "Delete from magazines";
+                        $cordovaSQLite.execute(db, selquery, []).then(function(res) {
+                          console.log('delete all');
+                        });
 
 
-     MagazineFactory.getAllReleasesByMagazineId().then(function(cdata){
-       //console.log(cdata);
-       if(cdata.data.message=='Succes'){
-         $scope.magazines=cdata.data.data;
+
+                   
+                   cdata.data.forEach(function(entry) {
+                      var filename=entry.id+".jpg";
+                      //console.log(entry.id)
+                     var selquery = "SELECT * FROM magazines WHERE magazine_id = ?";
+                        $cordovaSQLite.execute(db, selquery, [entry.id]).then(function(res) {
+                            if(res.rows.length > 0) {
+                                console.log("SELECTED -> " + res.rows.item(0).name + " " + res.rows.item(0).image);
+                            } else {
+
+                                //insert cover image starts
+                                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+                fs.root.getDirectory(
+                    "Magazine",
+                    {
+                        create: true
+                    },
+                    function(dirEntry) {
+                        dirEntry.getFile(
+                            filename, 
+                            {
+                                create: true, 
+                                exclusive: false
+                            }, 
+                            function gotFileEntry(fe) {
+                                var p = fe.toURL();
+                                fe.remove();
+                                ft = new FileTransfer();
+                             
+
+                                ft.download(
+                                    encodeURI(entry.image),
+                                    p,
+                                    function(entry) {
+                                        $ionicLoading.hide();
+                                        $scope.imgFile = entry.toURL();
+                                        console.log($scope.imgFile);
+                                        
+                                        $ionicLoading.hide();
+                                      
+                                    },
+                                    function(error) {
+                                        $ionicLoading.hide();
+                                        $scope.downloaded=false;
+                                        alert("Download Error Source -> " + error.source);
+                                    },
+                                    false,
+                                    null
+                                );
+                            }, 
+                            function() {
+                                $ionicLoading.hide();
+                                $scope.downloaded=false;
+                                console.log("Get file failed");
+                            }
+                        );
+                    }
+                );
+            },
+            function() {
+                $ionicLoading.hide();
+                $scope.downloaded=false;
+                console.log("Request for filesystem failed");
+            });
+
+                                //insert cover image ends
+
+
+                                console.log("No results found");
+
+                                  var insertquery = "INSERT INTO magazines (magazine_id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                                  $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,entry.image,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file]).then(function(res) {
+                                      console.log("INSERT ID -> " + res.insertId);
+                                  }, function (err) {
+                                      console.error(err);
+                                  });
+                            }
+                        }, function (err) {
+                            console.error(err);
+                        });  
+                    });
+
+                   }
+                 });
+               
+
+                 
+                }
+            }
+
+     Releases.all().then(function(cdata){
+       console.log(cdata.length);
+       if(cdata.length>0){
+         $scope.magazines=cdata;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log($scope.loopcount);
         $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
@@ -617,10 +724,12 @@ function extractError(error)
      });
   };
 
-  MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
+
+//first page loaded by this function starts
+  Releases.all().then(function(cdata){
        console.log(cdata);
-       if(cdata.message=='Succes'){
-         $scope.magazines=cdata.data;
+       if(cdata.length>0){
+         $scope.magazines=cdata;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
         $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
@@ -628,241 +737,18 @@ function extractError(error)
 
          $ionicLoading.hide();
         }else{
-          alert('please logot and login again');
+          //alert('please logot and login again');
 
           $ionicLoading.hide();
-         // $state.go('login')
+         // $state.go('logout')
         }
         //console.log($scope.magazines);
-    }).error(function(err){
-      alert('err');
-     // $state.go('login');
-      $ionicLoading.hide();
-
-    });
+    })
+//first page loaded by this function ends
 
 }
-   //$ionicLoading.hide();
-  /*$scope.magazines1 = [
-    { title: 'Hulk', id: 1, cover:'mag-01.jpg',subscribed:true },
-    { title: 'Chill', id: 2, cover:'mag-02.jpg' ,subscribed:false},
-    { title: 'Dubstep', id: 3, cover:'mag-03.jpg' ,subscribed:true},
-    { title: 'Indie', id: 4, cover:'mag-02.jpg',subscribed:true },
-    { title: 'Rap', id: 5 , cover:'mag-01.jpg',subscribed:false},
-    { title: 'Cowbell', id: 6, cover:'mag-03.jpg',subscribed:true }
-  ];
 
-  $scope.loopcount3=Math.ceil($scope.magazines1.length/4);
-
-  $scope.magazines2 = [
-    { title: 'Reggae', id: 1, cover:'mag-03.jpg',subscribed:true },
-    { title: 'Chill', id: 2, cover:'mag-02.jpg',subscribed:true },
-    { title: 'Dubstep', id: 3, cover:'mag-01.jpg',subscribed:true },
-    { title: 'Indie', id: 4, cover:'mag-02.jpg',subscribed:true },
-    { title: 'Rap', id: 5 , cover:'mag-03.jpg',subscribed:true},
-    { title: 'Cowbell', id: 6, cover:'mag-01.jpg',subscribed:true },
-    { title: 'Cowbell', id: 7, cover:'mag-02.jpg',subscribed:true },
-  ];
-
-  $scope.loopcount2=Math.ceil($scope.magazines2.length/4);*/
 })
-/*.controller('DetailCtrl', function($scope, $stateParams,MagazineFactory,$ionicLoading) {
 
-//console.log($stateParams.id);
-   $scope.i=0;
-
-   $ionicLoading.show({
-    content: 'Loading',
-    animation: 'fade-in',
-    showBackdrop: true,
-    maxWidth: 200,
-    showDelay: 0
-  });
-
-  $scope.onSwipeLeft = function () {
-  // Do whatever here to manage swipe left
-  alert("left");
-};
-
-  MagazineFactory.getReleaseById($stateParams.id).success(function(cdata){
-       console.log(cdata);
-       if(cdata.message=='Success'){
-         $scope.magazine=cdata.data; 
-        // $scope.loopcount=Math.ceil($scope.magazines.length/4);
-         //console.log(cdata.data);
-           Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
-           //Book = ePub($scope.magazine.epub_file);
-
-           Book.renderTo("area").then(function(){
-              Book.setStyle("padding", "0 40px");
-            });
-          //Book.renderTo("area");
-
-         $ionicLoading.hide();
-        }
-        //console.log($scope.magazines);
-    });
-
-});*/
-
-
-/*datModule.factory('datfactory', function ($http, $q){
-
-    this.getlist = function(){            
-        return $http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-releases-by-magazine-id?magazine_id=1',{'Access-Control-Allow-Origin': 'localhost:*'})
-            .then(function(response) {
-              console.log(response.data); //I get the correct items, all seems ok here
-             // $scope.$apply()
-              return response.data;
-            });            
-    }
-    return this;
-});
-
-datModule.controller('MagazineCtrl1', function ($scope, $state,$http,$ionicLoading,$q){
-  console.log('MagazineCtrl');
-  
-  $scope.init = function(){
-    $scope.page = 1;
-    $scope.getReleases()
-    .then(function(res){
-      // success
-      console.log('Magazines: ', res)
-      $scope.magazines = res.data;
-    }, function(status){
-      // err
-      $scope.pageError = status;
-    })
-  }
-
-  $scope.setActive = function(index){
-    angular.forEach($scope.imageList, function(image){
-      image.active = false;
-    })
-
-    $scope.imageList[index].active = true
-  }
-
-  $scope.getReleases = function(){
-    var defer = $q.defer();
-
-    $http.get('http://95.211.75.201/~digitalbookshelf/dev/api/get-all-releases-by-magazine-id?magazine_id=1')
-    .success(function(res){
-      defer.resolve(res)
-    })
-    .error(function(status, err){
-      defer.reject(status)
-    })
-
-    return defer.promise;
-  }
-
-  $scope.nextPage = function(){
-    $scope.page += 1;
-
-    $scope.getReleases()
-    .then(function(res){
-      
-    })
-  }
-
-  $scope.init();
-});
-
-
-
-*//*
-.controller("FileController", function($scope, $ionicLoading,$q) {
- 
-console.log('file controller')
-$scope.download = function() {
-  console.log('download called')
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-        fs.root.getDirectory(
-            "ExampleProject",
-            {
-                create: true
-            },
-            function(dirEntry) {
-                dirEntry.getFile(
-                    "test.png", 
-                    {
-                        create: true, 
-                        exclusive: false
-                    }, 
-                    function gotFileEntry(fe) {
-                        var p = fe.toURL();
-                        fe.remove();
-                        ft = new FileTransfer();
-                        ft.download(
-                            encodeURI("https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/2/000/058/15a/33b3b0e.jpg"),
-                            p,
-                            function(entry) {
-                                $ionicLoading.hide();
-                                $scope.imgFile = entry.toURL();
-                            },
-                            function(error) {
-                                $ionicLoading.hide();
-                                alert("Download Error Source -> " + error.source);
-                            },
-                            false,
-                            null
-                        );
-                    }, 
-                    function() {
-                        $ionicLoading.hide();
-                        console.log("Get file failed");
-                    }
-                );
-            }
-        );
-    },
-    function() {
-        $ionicLoading.hide();
-        console.log("Request for filesystem failed");
-    });
-}
  
     
-
-$scope.load = function() {
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-        fs.root.getDirectory(
-            "ExampleProject",
-            {
-                create: false
-            },
-            function(dirEntry) {
-                dirEntry.getFile(
-                    "test.png", 
-                    {
-                        create: false, 
-                        exclusive: false
-                    }, 
-                    function gotFileEntry(fe) {
-                        $ionicLoading.hide();
-                        $scope.imgFile = fe.toURL();
-                    }, 
-                    function(error) {
-                        $ionicLoading.hide();
-                        console.log("Error getting file");
-                    }
-                );
-            }
-        );
-    },
-    function() {
-        $ionicLoading.hide();
-        console.log("Error requesting filesystem");
-    });
-}
-
-
-
-})*/

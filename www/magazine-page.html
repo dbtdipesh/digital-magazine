@@ -37,7 +37,7 @@
         <div class="color-red"  >
           <a ng-repeat="magazine in magazines | limitTo:4:current+($index*4)"
 
-            ng-href="{{!(magazine.subscribed) ? '#app/detail/'+magazine.id : undefined}}"
+            ng-href="{{(magazine.magazine_id) ? '#app/detail/'+magazine.magazine_id : undefined}}"
 
             ng-click="(magazine.subscribed) ?undefined:undefined"
            

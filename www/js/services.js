@@ -1,6 +1,6 @@
 angular.module('magazines.services',[])
 .factory('MagazineFactory',['$http',function($http){
-
+    var releases=[];
     var tokenfull=window.localStorage.getItem('tokenkey');
     token = tokenfull.split('.')[1];
     
@@ -38,6 +38,21 @@ angular.module('magazines.services',[])
                       header:headers
                     });
             },
+            getAllReleasesByMagazineIdoff: function() {
+ 
+ 
+              $cordovaSQLite.execute(db, "SELECT * FROM magazines")
+              .then(function(res){
+              for(var i = 0; i < res.rows.length; i++){
+              releases.push(res.rows.item(i));
+              }
+              },
+              function(err){ 
+              console.log("Error");
+              })
+               
+              return releases;
+              },
 
             getAllReleasesByMagazineId:function(){
               var tokenfull=window.localStorage.getItem('tokenkey');
@@ -261,4 +276,81 @@ angular.module('magazines.services',[])
     username: function() {return username;},
     role: function() {return role;}
   };
+})
+
+.factory('DBA', function($cordovaSQLite, $q, $ionicPlatform) {
+  var self = this;
+
+  // Handle query's and potential errors
+  self.query = function (query, parameters) {
+    parameters = parameters || [];
+    var q = $q.defer();
+
+    $ionicPlatform.ready(function () {
+      $cordovaSQLite.execute(db, query, parameters)
+        .then(function (result) {
+          q.resolve(result);
+        }, function (error) {
+          console.warn('I found an error');
+          console.warn(error);
+          q.reject(error);
+        });
+    });
+    return q.promise;
+  }
+
+  // Proces a result set
+  self.getAll = function(result) {
+    var output = [];
+
+    for (var i = 0; i < result.rows.length; i++) {
+      output.push(result.rows.item(i));
+    }
+    return output;
+  }
+
+  // Proces a single result
+  self.getById = function(result) {
+    var output = null;
+    output = angular.copy(result.rows.item(0));
+    return output;
+  }
+
+  return self;
+})
+
+.factory('Releases', function($cordovaSQLite, DBA) {
+  var self = this;
+
+  self.all = function() {
+    return DBA.query("SELECT * FROM magazines")
+      .then(function(result){
+        return DBA.getAll(result);
+      });
+  }
+
+  self.get = function(id) {
+    var parameters = [id];
+    return DBA.query("SELECT * FROM magazines WHERE magazine_id = (?)", parameters)
+      .then(function(result) {
+        return DBA.getById(result);
+      });
+  }
+
+  self.add = function(member) {
+    var parameters = [member.magazine_id, member.magazine_name];
+    return DBA.query("INSERT INTO magazines (id, name) VALUES (?,?)", parameters);
+  }
+
+  self.remove = function(member) {
+    var parameters = [member.magazine_id];
+    return DBA.query("DELETE FROM magazines WHERE magazine_id = (?)", parameters);
+  }
+
+  self.update = function(origMember, editMember) {
+    var parameters = [editMember.id, editMember.name, origMember.id];
+    return DBA.query("UPDATE magazines SET magazine_id = (?), name = (?) WHERE magazine_id = (?)", parameters);
+  }
+
+  return self;
 })
