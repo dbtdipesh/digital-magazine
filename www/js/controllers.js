@@ -344,18 +344,19 @@ var datModule=angular.module('starter.controllers',[])
   if($stateParams.id!=undefined){
  $ionicLoading.hide();
   Releases.get($stateParams.id).then(function(cdata){
-       console.log(cdata.length);
+       //console.log(cdata.length);
        if(cdata.magazine_id){
          $scope.magazine=cdata;
 
-         //console.log(cdata)
+        // console.log(cdata)
         
-         $scope.file={"file":cdata.extracted_file} 
+         $scope.file={"file":cdata.extracted_file};
 
          $scope.onlinepath=$scope.file.file;
 
          var statusDom; 
          var url=cdata.zip_file;
+         console.log(url);
 
 
          var filename = url.substring(url.lastIndexOf('/')+1);
@@ -459,56 +460,59 @@ var datModule=angular.module('starter.controllers',[])
                 $scope.downloaded=false;
                 console.log("Request for filesystem failed");
             });
-};
-function extractOK(status)
-{
-    console.log("extractOK");
-};
+        }; //function download ends
 
-function extractError(error)
-{ 
-    console.log("extractError "+error);
-};
+        function extractOK(status)
+        {
+            console.log("extractOK");
+        };
 
-   window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-        fs.root.getDirectory(
-            "Magazine/"+$stateParams.id,
-            {
-                create: false
-            },
-            function(dirEntry) {
-                dirEntry.getFile(
-                    'index.html', 
-                    {
-                        create: false, 
-                        exclusive: false
-                    }, 
-                    function gotFileEntry(fe) {
-                        $ionicLoading.hide();
-                        $scope.filepath = fe.toURL();
-                        $scope.downloaded=true;
-                        //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
-                        console.log($scope.zipFile);
-                        console.log("Extracting "+ $scope.zipFile);
-                        var ZipClient = new ExtractZipFilePlugin();
-                        ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
-                        //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
-                        $scope.filepath
-                    }, 
-                    function(error) {
-                        $ionicLoading.hide();
-                         $scope.downloaded=false;
-                        console.log("Error getting file");
-                    }
-                );
-            }
-        );
-    },
-    function() {
-        $ionicLoading.hide();
-         $scope.downloaded=false;
-        console.log("Error requesting filesystem");
-    });
+        function extractError(error)
+        { 
+            console.log("extractError "+error);
+        };
+
+
+        //check if magazine is in phonememory
+         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
+              fs.root.getDirectory(
+                  "Magazine/"+$stateParams.id,
+                  {
+                      create: false
+                  },
+                  function(dirEntry) {
+                      dirEntry.getFile(
+                          'index.html', 
+                          {
+                              create: false, 
+                              exclusive: false
+                          }, 
+                          function gotFileEntry(fe) {
+                              $ionicLoading.hide();
+                              $scope.filepath = fe.toURL();
+                              $scope.downloaded=true;
+                              //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
+                              console.log($scope.zipFile);
+                              console.log("Extracting "+ $scope.zipFile);
+                              var ZipClient = new ExtractZipFilePlugin();
+                              ZipClient.extractFile('sdcard/Magazine/'+filename, extractOK, extractError);
+                              //extractZipFile.unzip('cdvfile://localstorage/emulated/0/Magazine/', , extractError);
+                              $scope.filepath
+                          }, 
+                          function(error) {
+                              $ionicLoading.hide();
+                               $scope.downloaded=false;
+                              console.log("Error getting file");
+                          }
+                      );
+                  }
+              );
+          },
+          function() {
+              $ionicLoading.hide();
+               $scope.downloaded=false;
+              console.log("Error requesting filesystem");
+          });
 
 
 
@@ -570,7 +574,7 @@ function extractError(error)
             });*/
           //Book.renderTo("area");
 
-
+          $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
@@ -596,19 +600,17 @@ function extractError(error)
                
 
                MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
-                 //console.log(cdata);
-                // alert('test');
+                 console.log(cdata);
 
                  if(cdata.message=='Succes'){
-                    var selquery = "Delete from magazines";
-                        $cordovaSQLite.execute(db, selquery, []).then(function(res) {
-                          console.log('delete all');
-                        });
-
-
+                    /*var delquery = "Delete from magazines";
+                        $cordovaSQLite.execute(db, delquery, []).then(function(res) {
+                          console.log('deleted all');
+                        });*/
 
                    
                    cdata.data.forEach(function(entry) {
+                    var imgFile='';
                       var filename=entry.id+".jpg";
                       //console.log(entry.id)
                      var selquery = "SELECT * FROM magazines WHERE magazine_id = ?";
@@ -619,110 +621,126 @@ function extractError(error)
 
                                 //insert cover image starts
                                 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
-                fs.root.getDirectory(
-                    "Magazine",
-                    {
-                        create: true
-                    },
-                    function(dirEntry) {
-                        dirEntry.getFile(
-                            filename, 
-                            {
-                                create: true, 
-                                exclusive: false
-                            }, 
-                            function gotFileEntry(fe) {
-                                var p = fe.toURL();
-                                fe.remove();
-                                ft = new FileTransfer();
-                             
+                                  fs.root.getDirectory(
+                                      "Magazine",
+                                      {
+                                          create: true
+                                      },
+                                      function(dirEntry) {
+                                          dirEntry.getFile(
+                                              filename, 
+                                              {
+                                                  create: true, 
+                                                  exclusive: false
+                                              }, 
+                                              function gotFileEntry(fe) {
+                                                  var p = fe.toURL();
+                                                  fe.remove();
+                                                  ft = new FileTransfer();
+                                               
 
-                                ft.download(
-                                    encodeURI(entry.image),
-                                    p,
-                                    function(entry) {
-                                        $ionicLoading.hide();
-                                        $scope.imgFile = entry.toURL();
-                                        console.log($scope.imgFile);
-                                        
-                                        $ionicLoading.hide();
-                                      
-                                    },
-                                    function(error) {
-                                        $ionicLoading.hide();
-                                        $scope.downloaded=false;
-                                        alert("Download Error Source -> " + error.source);
-                                    },
-                                    false,
-                                    null
-                                );
-                            }, 
-                            function() {
-                                $ionicLoading.hide();
-                                $scope.downloaded=false;
-                                console.log("Get file failed");
-                            }
-                        );
-                    }
-                );
-            },
-            function() {
-                $ionicLoading.hide();
-                $scope.downloaded=false;
-                console.log("Request for filesystem failed");
-            });
-
+                                                  ft.download(
+                                                      encodeURI(entry.image),
+                                                      p,
+                                                      function(ec) {
+                                                          //$ionicLoading.hide();
+                                                          imgFile = ec.toURL();
+                                                         var insertquery = "INSERT INTO magazines (magazine_id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                                                    $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,imgFile,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file]).then(function(res) {
+                                                        console.log("INSERT ID -> " + res.insertId+">>"+imgFile);
+                                                        //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+                                                    }, function (err) {
+                                                        console.error(err);
+                                                    });
+                                                          
+                                                         // $ionicLoading.hide();
+                                                        
+                                                      },
+                                                      function(error) {
+                                                         // $ionicLoading.hide();
+                                                         // $scope.downloaded=false;
+                                                         alert('Error downloading cover');
+                                                         // alert("Download Error Source -> " + error.source);
+                                                      },
+                                                      false,
+                                                      null
+                                                  );
+                                              }, 
+                                              function() {
+                                                 // $ionicLoading.hide();
+                                                 // $scope.downloaded=false;
+                                                  console.log("Get file failed");
+                                              }
+                                          );
+                                      }
+                                  );
+                              },
+                              function() {
+                                  $ionicLoading.hide();
+                                  $scope.downloaded=false;
+                                  console.log("Request for filesystem failed");
+                              });
                                 //insert cover image ends
-
-
                                 console.log("No results found");
-
-                                  var insertquery = "INSERT INTO magazines (magazine_id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file) VALUES (?,?,?,?,?,?,?,?,?,?)";
-                                  $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,entry.image,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file]).then(function(res) {
-                                      console.log("INSERT ID -> " + res.insertId);
-                                  }, function (err) {
-                                      console.error(err);
-                                  });
                             }
                         }, function (err) {
                             console.error(err);
-                        });  
-                    });
+                        }); //select query execute ends
+                    }); //cdata foreach ends
 
-                   }
-                 });
+                   }// message==succes ends
+                 })/*.finally(function(){
+                 $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+                 //$scope.$broadcast('scroll.refreshComplete');
+                 })*/;
+                 // getAllReleasesByMagazineId ends
                
 
                  
-                }
-            }
+                } //if navigator.connection.type ends
+            }//window.Connection
+    $ionicLoading.show({
+    template: "Loading...",
+    delay: 2000,
+    duration: 5000
+  });
 
+ //alert('a')
      Releases.all().then(function(cdata){
        console.log(cdata.length);
        if(cdata.length>0){
          $scope.magazines=cdata;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log($scope.loopcount);
-        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+       // $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
 
 
         // $ionicLoading.hide();
         }else{
           
-          var alertPopup = $ionicPopup.alert({
+          /*var alertPopup = $ionicPopup.alert({
             title: 'Login failed!',
             template: 'please logout and login again'
-          });
+          });*/
           //$ionicLoading.hide();
          // $state.go('login')
         }
     })
      .finally(function() {
        // Stop the ion-refresher from spinning
+       $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
        $scope.$broadcast('scroll.refreshComplete');
        
      });
-  };
+
+
+   setTimeout(function () {
+    $scope.$apply(function () {
+      $ionicLoading.hide();
+    });
+  }, 1000);
+   
+  }; //refresh function ends
 
 
 //first page loaded by this function starts
@@ -745,7 +763,7 @@ function extractError(error)
         //console.log($scope.magazines);
     })
 //first page loaded by this function ends
-
+$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
 }
 
 })
