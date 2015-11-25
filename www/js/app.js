@@ -41,8 +41,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     }
 
   
-      db = $cordovaSQLite.openDB({ name: 'app.db' });
-      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (magazine_id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL)");
+      db = $cordovaSQLite.openDB({ name: 'mag.db' });
+      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0)");
           
    
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -89,7 +89,7 @@ function nullHandler(){};
   db = openDatabase(shortName, version, displayName,maxSize);
 
  db.transaction(function(tx){
-    tx.executeSql('CREATE TABLE IF NOT EXISTS Magazines(magazine_id INTEGER NOT_NULL PRIMARY KEY, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL)',
+    tx.executeSql('CREATE TABLE IF NOT EXISTS Magazines(id INTEGER NOT_NULL PRIMARY KEY, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL)',
 [],nullHandler,errorHandler);
  },errorHandler,successCallBack);*/
 

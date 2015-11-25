@@ -2,7 +2,10 @@ angular.module('magazines.services',[])
 .factory('MagazineFactory',['$http',function($http){
     var releases=[];
     var tokenfull=window.localStorage.getItem('tokenkey');
-    token = tokenfull.split('.')[1];
+    if(tokenfull!=null)
+       token = tokenfull.split('.')[1];
+     else
+      token='';
     
     
     var headers = {
@@ -22,15 +25,22 @@ angular.module('magazines.services',[])
      			return $http.post(url+'get-all-magazines');
             },
             getReleaseById:function(id){
+
               var tokenfull=window.localStorage.getItem('tokenkey');
-    token = tokenfull.split('.')[1];
+              if(tokenfull!=null)
+               token = tokenfull.split('.')[1];
+             else
+              token='';
             	//data={id:1};
             	return $http.post(url+'get-release-by-id?token='+token+'&id='+id);
             },
 
             getProfile:function(){
               var tokenfull=window.localStorage.getItem('tokenkey');
-            token = tokenfull.split('.')[1];
+            if(tokenfull!=null)
+               token = tokenfull.split('.')[1];
+             else
+              token='';
               //data={id:1};
               return $http({
                       method: 'get',
@@ -41,7 +51,7 @@ angular.module('magazines.services',[])
             getAllReleasesByMagazineIdoff: function() {
  
  
-              $cordovaSQLite.execute(db, "SELECT * FROM magazines")
+              $cordovaSQLite.execute(db, "SELECT * FROM magazines WHERE deleted=0")
               .then(function(res){
               for(var i = 0; i < res.rows.length; i++){
               releases.push(res.rows.item(i));
@@ -56,7 +66,10 @@ angular.module('magazines.services',[])
 
             getAllReleasesByMagazineId:function(){
               var tokenfull=window.localStorage.getItem('tokenkey');
-    token = tokenfull.split('.')[1];
+              if(tokenfull!=null)
+               token = tokenfull.split('.')[1];
+             else
+              token='';
 
                    console.log(url+'get-all-releases-by-magazine-id?token='+token+'&magazine_id=1');
 
@@ -323,7 +336,7 @@ angular.module('magazines.services',[])
   var self = this;
 
   self.all = function() {
-    return DBA.query("SELECT * FROM magazines")
+    return DBA.query("SELECT * FROM magazines WHERE deleted=0")
       .then(function(result){
         return DBA.getAll(result);
       });
@@ -331,25 +344,25 @@ angular.module('magazines.services',[])
 
   self.get = function(id) {
     var parameters = [id];
-    return DBA.query("SELECT * FROM magazines WHERE magazine_id = (?)", parameters)
+    return DBA.query("SELECT * FROM magazines WHERE id = (?)", parameters)
       .then(function(result) {
         return DBA.getById(result);
       });
   }
 
   self.add = function(member) {
-    var parameters = [member.magazine_id, member.magazine_name];
+    var parameters = [member.id, member.magazine_name];
     return DBA.query("INSERT INTO magazines (id, name) VALUES (?,?)", parameters);
   }
 
   self.remove = function(member) {
-    var parameters = [member.magazine_id];
-    return DBA.query("DELETE FROM magazines WHERE magazine_id = (?)", parameters);
+    var parameters = [member.id];
+    return DBA.query("DELETE FROM magazines WHERE id = (?)", parameters);
   }
 
   self.update = function(origMember, editMember) {
     var parameters = [editMember.id, editMember.name, origMember.id];
-    return DBA.query("UPDATE magazines SET magazine_id = (?), name = (?) WHERE magazine_id = (?)", parameters);
+    return DBA.query("UPDATE magazines SET id = (?), name = (?) WHERE id = (?)", parameters);
   }
 
   return self;
