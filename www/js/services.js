@@ -48,6 +48,21 @@ angular.module('magazines.services',[])
                       header:headers
                     });
             },
+
+            updateProfile:function(email,fn,ln,contact){
+              console.log(url+'update-my-profile?token='+token+'&email='+email+'&first_name='+fn+'&last_name='+ln+'&contact_number='+contact);
+              var tokenfull=window.localStorage.getItem('tokenkey');
+            if(tokenfull!=null)
+               token = tokenfull.split('.')[1];
+             else
+              token='';
+              //data={id:1};
+              return $http({
+                      method: 'get',
+                      url: url+'update-my-profile?token='+token+'&email='+email+'&first_name='+fn+'&last_name='+ln+'&contact_number='+contact,
+                      header:headers
+                    });
+            },
             getAllReleasesByMagazineIdoff: function() {
  
  
@@ -180,7 +195,7 @@ angular.module('magazines.services',[])
   };
 
    var register = function(email, fn,ln,contact) {
-    console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
+    //console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
     return $q(function(resolve, reject) {
          var data ={email: email, first_name: fn,last_name: ln,magazine_id: 1};
         var magazine_id='1';

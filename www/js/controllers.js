@@ -178,9 +178,39 @@ var datModule=angular.module('starter.controllers',[])
 
   $scope.token = window.localStorage.getItem('tokenkey');
    MagazineFactory.getProfile().then(function(res){
-       $scope.data=res.data.data
-       console.log(res.data.data)
-   })
+       $scope.data=res.data.data;
+       console.log(res.data.data);
+   });
+    $scope.update = function(data) {
+
+    if(window.Connection) {
+
+      if(navigator.connection.type == Connection.NONE) {
+          $ionicPopup.confirm({
+              title: "Update Failed !!",
+              content: "Please connect to internet"
+          })
+          .then(function(result) {
+              if(!result) {
+                  ionic.Platform.exitApp();
+              }
+          });
+          
+      }
+      else{
+        MagazineFactory.updateProfile(data.email,data.first_name, data.last_name, data.contact_number).then(function(res) {
+          console.log(res);
+          $state.go('app.profile', {}, {reload: true});
+          //$scope.setCurrentUsername(data.username);
+        }, function(err) {
+          var alertPopup = $ionicPopup.alert({
+            title: 'Update Failed !!',
+            template: 'Please check your credentials!'
+          });
+        });//AuthService.login ends
+     }//else ends navigator.connection.type
+    }//window.connection ends
+  };
 })
 .controller('OfflineMagazineCtrl',function($scope,Releases,MagazineFactory,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform,$cordovaFile){
    $scope.doRefresh = function() {
@@ -317,6 +347,7 @@ Releases.all().then(function(cdata){
 
        });
        
+        setTimeout(function() {
         console.log(magazines);
          $scope.offlinemagazine=magazines;//JSON.stringify(magazines);
          console.log($scope.offlinemagazine);
@@ -324,7 +355,13 @@ Releases.all().then(function(cdata){
         // console.log($scope.offlinemagazine)
          $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
          console.log($scope.loopcount);
+         console.log($scope.offlinemagazine);
+         $scope.$apply(function(){
+          $scope.offlinemagazine = magazines;
+         $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
+       });
         $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+      },1000);
 
          //$scope.$broadcast('scroll.refreshComplete'); 
          
