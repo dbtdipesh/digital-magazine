@@ -357,6 +357,13 @@ angular.module('magazines.services',[])
       });
   }
 
+   self.favourites = function() {
+    return DBA.query("SELECT * FROM magazines WHERE deleted=0 AND favourite=1")
+      .then(function(result){
+        return DBA.getAll(result);
+      });
+  }
+
   self.get = function(id) {
     var parameters = [id];
     return DBA.query("SELECT * FROM magazines WHERE id = (?)", parameters)

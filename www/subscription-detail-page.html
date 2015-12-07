@@ -2,19 +2,7 @@
 <ion-view>
     <div class="searchTab"><!---------- searchbox start ---------->
 
-    <!---------- searchTab start ---------->
-      <div class="SearchBox">
-
-      <div class="list list-inset">
-        <label class="item item-input">
-          <i class="icon ion-search placeholder-icon"></i>
-          <input type="text" placeholder="Search">
-        </label>
-      </div>
-
-
-      </div>
-      <!---------- searchbox end ---------->
+   
 
 
 
@@ -28,13 +16,20 @@
         <li>{{magazine.article}}</li>
         <li>{{magazine.issued_date}}</li>
         <li>{{magazine.introduction}}</li>
+        <li ng-if="magazine.favourite==0"><a ng-click="favourite({{magazine.id}})" ><span class="ion-ios-star-outline"><span>Mark as favourite</a></li>
+        <li ng-if="magazine.favourite==1"><a ng-click="defavourite({{magazine.id}})" ><span class="ion-ios-star"><span>Remove from favourites</a></li>
       </ul>
 
 <a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="downloaded==false && connection==true">Download Magazine</a>
-<a class="button button-balanced" href="#app/openonline/{{magazine.id}}" ng-if="downloaded==false && connection==true">Open Magazine</a>
+<a class="button button-balanced" href="#app/openonline/{{magazine.id}}" ng-if="downloaded==false && connection==true">Open Magazine</a><br/>
+<a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="oldversion!=newversion && connection==true">Download New Version</a>
+<a class="button button-balanced" href="#app/open/{{magazine.id}}" ng-if="downloaded">Open Magazine</a>
+
+
+
 <div id='status'></div>
 <!-- <a class="button button-balanced" ng-click="load({{magazine.id}})">Op Magazine</a> -->
-      <a class="button button-balanced" href="#app/open/{{magazine.id}}" ng-if="downloaded">Open Magazine</a>
+      
 
 
 

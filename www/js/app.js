@@ -10,10 +10,10 @@ var version = '1.0';
 var displayName = 'WebSqlDB';
 var maxSize = 65535;*/
 //var connection_offline=true;
-var db = null;
+var db = null,device;
 var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines.services','ngCordova'])
 
-.run(function($ionicPlatform, $ionicPopup,$cordovaSQLite) {
+.run(function($ionicPlatform, $ionicPopup,$cordovaSQLite,$cordovaDevice) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -30,7 +30,7 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   //autoResize('iframe1');
   // $state.go($state.current, {}, {reload: true});
 }, false);*/
-  
+  /*
     if(window.cordova && window.cordova.plugins.Keyboard) {
      // screen.lockOrientation('portrait');
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -39,10 +39,26 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+  */
+     device = $cordovaDevice.getDevice();
+
+    var cordova = $cordovaDevice.getCordova();
+
+    var model = $cordovaDevice.getModel();
+
+    var platform = $cordovaDevice.getPlatform();
+
+    var uuid = $cordovaDevice.getUUID();
+
+    var version = $cordovaDevice.getVersion();
+   
+    
+
+
 
   
-      db = $cordovaSQLite.openDB({ name: 'mag.db' });
-      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0)");
+      db = $cordovaSQLite.openDB({ name: 'magaz.db' });
+      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0)");
           
    
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -121,7 +137,7 @@ function nullHandler(){};
     controller: 'ForgetCtrl'
     
   })
-  .state('app.search', {
+ /* .state('app.search', {
     url: '/search',
     views: {
       'menuContent': {
@@ -129,7 +145,7 @@ function nullHandler(){};
         
       }
     }
-  })
+  })*/
 .state('app.setting', {
     url: '/setting',
     views: {
@@ -189,6 +205,7 @@ function nullHandler(){};
   })
 
  .state('app.magazine', {
+    cache: false,
     url: '/magazine',
     views: {
       'menuContent': {
@@ -198,6 +215,7 @@ function nullHandler(){};
     }
   })
   .state('app.downloaded', {
+    cache: false,
     url: '/downloaded',
     views: {
       'menuContent': {
@@ -206,7 +224,18 @@ function nullHandler(){};
       }
     }
   })
+   .state('app.favourites', {
+    cache: false,
+    url: '/favourites',
+    views: {
+      'menuContent': {
+        templateUrl: 'favourites.html',
+        controller: 'FavouritesMagazineCtrl'
+      }
+    }
+  })
    .state('app.detail', {
+     cache: false,
     url: '/detail/{id}',
     views: {
       'menuContent': {
