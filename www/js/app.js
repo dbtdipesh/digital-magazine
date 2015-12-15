@@ -13,7 +13,7 @@ var maxSize = 65535;*/
 var db = null,device;
 var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines.services','ngCordova'])
 
-.run(function($ionicPlatform, $ionicPopup,$cordovaSQLite,$cordovaDevice) {
+.run(function($ionicPlatform, $ionicPopup,$cordovaSQLite,$cordovaDevice,$http) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -30,16 +30,16 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   //autoResize('iframe1');
   // $state.go($state.current, {}, {reload: true});
 }, false);*/
-  /*
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-     // screen.lockOrientation('portrait');
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-       cordova.plugins.Keyboard.disableScroll(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  */
+ 
+//    if(window.cordova && window.cordova.plugins.Keyboard) {
+//     // screen.lockOrientation('portrait');
+//      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+//       cordova.plugins.Keyboard.disableScroll(true);
+//    }
+//    if(window.StatusBar) {
+//      StatusBar.styleDefault();
+//    }
+ 
      device = $cordovaDevice.getDevice();
 
     var cordova = $cordovaDevice.getCordova();
@@ -51,8 +51,57 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
     var uuid = $cordovaDevice.getUUID();
 
     var version = $cordovaDevice.getVersion();
+    var connection=false;
    
-    
+    if(window.Connection) {
+
+    if(navigator.connection.type == Connection.NONE) {
+        connection=false;
+    }else{
+      connection=true;
+      
+    }
+  }
+    document.addEventListener("pause", onPause, false);
+     document.addEventListener("resume", onResume, false);
+
+    function onPause() {
+        stat_id=window.localStorage.getItem('reading_statistics_id');
+            if(stat_id && connection){
+                $http.post(url+'read-update-time-statistics?statistics_id='+stat_id).success(function(res){
+                console.log(res);
+                localStorage.removeItem("reading_statistics_id");
+              });
+
+            }
+    }
+
+
+
+
+    function onResume(){
+      reading_release_id=window.localStorage.getItem('release_id');
+      if(reading_release_id && connection){
+        var tokenfull = window.localStorage.getItem('tokenkey');
+        if(tokenfull!=null)
+           token = tokenfull.split('.')[1];
+         else
+          token='';
+        var release_id=window.localStorage.getItem('release_id');
+        var device=window.localStorage.getItem('device');
+        var pos=window.localStorage.getItem('pos');
+          $http.post(url+'read-statistics?action=open&token='+token+'&release_id='+release_id+'&device='+device+'&geo_location='+pos).success(function(res){
+              console.log(res);
+              window.localStorage.setItem('reading_statistics_id', res.data.statistics_id);
+              window.localStorage.setItem('release_id', release_id);
+              window.localStorage.setItem('device', device);
+              window.localStorage.setItem('geo_location', pos);
+
+
+            });
+        }
+    }
+
 
 
 
@@ -321,6 +370,16 @@ function nullHandler(){};
     }
   });
 })
+.directive('myDirective', function() {
+     return {
+    link : function(scope, element, attributes){
+      element.contents().find('html').bind('click', function () {
+           alert("hello");
+       });
+    }
+  };
+})
+
 .filter('trustAsResourceUrl', ['$sce', function($sce) {
     return function(val) {
         return $sce.trustAsResourceUrl(val);

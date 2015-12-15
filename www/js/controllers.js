@@ -446,15 +446,46 @@ Releases.all().then(function(cdata){
       if($state.$current.self.name=='app.openonline' || $state.$current.self.name=='app.open'){
         //alert(url);
 
-        $http.post(url+'open-download?action=open&token='+token+'&release_id='+$stateParams.id+'&device='+device.model+'&geo_location='+pos).success(function(res){
-          //console.log(res);
+        $http.post(url+'read-statistics?action=open&token='+token+'&release_id='+$stateParams.id+'&device='+device.model+'&geo_location='+pos).success(function(res){
+          console.log(res);
+          window.localStorage.setItem('reading_statistics_id', res.data.statistics_id);
+          window.localStorage.setItem('release_id', $stateParams.id);
+          window.localStorage.setItem('device', device.model);
+          window.localStorage.setItem('geo_location', pos);
+
 
         });
       }
 
       if($state.$current.self.name=='app.detail'){
-        console.log($ionicHistory.backView().stateName);
-      }
+          stat_id=window.localStorage.getItem('reading_statistics_id');
+            if(stat_id){
+                $http.post(url+'read-update-time-statistics?statistics_id='+stat_id).success(function(res){
+                console.log(res);
+                localStorage.removeItem("reading_statistics_id");
+                localStorage.removeItem("release_id");
+                localStorage.removeItem("device");
+                localStorage.removeItem("geo_location");
+              });
+
+            }
+          }
+
+
+        //console.log($ionicHistory.viewHistory().forwardView.stateName);//"app.openonline"
+        /*if($ionicHistory.viewHistory().forwardView!=null){
+        var statename= $ionicHistory.viewHistory().forwardView.stateName?$ionicHistory.viewHistory().forwardView.stateName:undefined;
+        if(statename!=undefined && statename=="app.openonline"){
+            alert('a');
+          //var stat_id=window.localStorage.getItem('reading_statistics_id');
+          //$http.post(url+'read-update-time-statistics?statistics_id='+stat_id).success(function(res){
+          //console.log(res);
+          //localStorage.removeItem("reading_statistics_id");
+
+        //});
+        
+      }*/
+    
 
      
 
@@ -490,11 +521,11 @@ Releases.all().then(function(cdata){
          $scope.onlinepath=$scope.file.file;
 
          var statusDom; 
-         var url=cdata.zip_file;
+         var zurl=cdata.zip_file;
         // console.log(url);
 
 
-         var filename = url.substring(url.lastIndexOf('/')+1);
+         var filename = zurl.substring(zurl.lastIndexOf('/')+1);
          $scope.oldversion =cdata.version;
          //console.log(filename);
         // $scope.filepath='Magazine/index.html';
@@ -587,16 +618,16 @@ Releases.all().then(function(cdata){
                                   };*/
 
                                 ft.download(
-                                    encodeURI(url),
+                                    encodeURI(zurl),
                                     p,
                                     function(entry) {
                                         $ionicLoading.hide();
                                         $scope.zipFile = entry.toURL();
                                         console.log($scope.zipFile);
                                         $http.post(url+'open-download?action=download&token='+token+'&release_id='+$stateParams.id+'&device='+device.model+'&geo_location='+pos).success(function(res){
-          console.log(res);
+                                          console.log(res);
 
-        });
+                                       });
                                         $ionicLoading.show({
                                             template: 'Installing...'
                                           });
@@ -610,7 +641,7 @@ Releases.all().then(function(cdata){
                                         var upquery = "UPDATE magazines SET version=? WHERE id=?";
 
                                                     $cordovaSQLite.execute(db, upquery, [$scope.newversion,$stateParams.id]).then(function(res) {
-                                                        console.log("UPDATE ID -> " + res.insertId+">>"+id);
+                                                        console.log("UPDATE ID -> " + res.insertId+">>");
                                                         
                                                         $scope.oldversion=$scope.newversion;
                                                         //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
