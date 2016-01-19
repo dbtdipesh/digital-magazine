@@ -1,6 +1,6 @@
 
 <ion-view>
-    <div class="searchTab"><!---------- searchbox start ---------->
+   
 
    
 
@@ -9,25 +9,32 @@
 
       
       <ion-content class="subscriptionDetail">
-      <p>{{magazine.name}}</p>
+      <h4>{{magazine.name | uppercase}}</h4>
       <img ng-src="{{magazine.image}}">
 
       <ul>
         <li>{{magazine.article}}</li>
-        <li>{{magazine.issued_date}}</li>
+        <!-- <li>{{magazine.issued_date}}</li> -->
         <li>{{magazine.introduction}}</li>
         <li ng-if="magazine.favourite==0"><a ng-click="favourite({{magazine.id}})" ><span class="ion-ios-star-outline"><span>Mark as favourite</a></li>
         <li ng-if="magazine.favourite==1"><a ng-click="defavourite({{magazine.id}})" ><span class="ion-ios-star"><span>Remove from favourites</a></li>
       </ul>
 
+    
+<div ng-if="magazine.is_free>0 || magazine.subscribed=='true'">
 <a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="downloaded==false && connection==true">Download Magazine</a>
-<a class="button button-balanced" href="#app/openonline/{{magazine.id}}" ng-if="downloaded==false && connection==true">Open Magazine</a><br/>
-<a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="oldversion!=newversion && connection==true">Download New Version</a>
-<a class="button button-balanced" href="#app/open/{{magazine.id}}" ng-if="downloaded">Open Magazine</a>
+<!-- <a class="button button-balanced" href="#app/openonline/{{magazine.id}}" ng-if="downloaded==false && connection==true">Open Magazine</a><br/> -->
+<a class="button button-balanced inappbrowser" href="{{magazine.extracted_file}}" ng-if="downloaded==false && connection==true">Open Magazine</a><br/>
+<a class="button button-balanced" ng-click="download({{magazine.id}})" ng-if="oldversion!=newversion && connection==true && downloaded==true">Download New Version</a>
+<a class="button button-balanced inappbrowser" href="{{filepath   | trustAsResourceUrl}}" ng-if="downloaded">Open Magazine</a>
 
+</div>
 
+<div ng-if="magazine.is_free==0 && magazine.subscribed=='false'">
+  <a class="button button-balanced" href="#app/subscribe/{{magazine.id}}">Subscribe</a>
+  </div>
 
-<div id='status'></div>
+<!-- <div id='status'></div> -->
 <!-- <a class="button button-balanced" ng-click="load({{magazine.id}})">Op Magazine</a> -->
       
 
@@ -40,7 +47,7 @@
 
 
 
-      </div><!---------- searchTab end ---------->
+     
     </ion-view>
 
 

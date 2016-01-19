@@ -30,16 +30,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
   //autoResize('iframe1');
   // $state.go($state.current, {}, {reload: true});
 }, false);*/
- 
-//    if(window.cordova && window.cordova.plugins.Keyboard) {
-//     // screen.lockOrientation('portrait');
-//      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-//       cordova.plugins.Keyboard.disableScroll(true);
-//    }
-//    if(window.StatusBar) {
-//      StatusBar.styleDefault();
-//    }
- 
+  /* if(window.cordova && window.cordova.plugins.Keyboard) {
+    // screen.lockOrientation('portrait');
+     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+   }
+   if(window.StatusBar) {
+     StatusBar.styleDefault();
+   }*/
+      navigator.splashscreen.hide();
      device = $cordovaDevice.getDevice();
 
     var cordova = $cordovaDevice.getCordova();
@@ -106,8 +105,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
 
 
   
-      db = $cordovaSQLite.openDB({ name: 'magaz.db' });
-      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0)");
+      db = $cordovaSQLite.openDB({ name: 'travel.db' });
+      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,is_free INT NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0,release_id INT NOT NULL DEFAULT 0)");
           
    
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -184,6 +183,17 @@ function nullHandler(){};
     templateUrl: 'forget.html',
     //controller: 'AppCtrl'
     controller: 'ForgetCtrl'
+    
+  })
+  .state('app.changepassword', {
+    url: '/changepassword',
+    views: {
+      'menuContent': {
+        templateUrl: 'change-password.html',
+        controller:'ChangePasswordCtrl'
+        
+      }
+    }
     
   })
  /* .state('app.search', {
@@ -322,6 +332,15 @@ function nullHandler(){};
       }
     }
   })
+      .state('app.subscribe', {
+    url: '/subscribe/{id}',
+    views: {
+      'menuContent': {
+        templateUrl: 'subscribe.html',
+         controller: 'SubscribeCtrl'
+      }
+    }
+  })
   // if none of the above states are matched, use this as the fallback
   var token1=window.localStorage.getItem('tokenkey');
   //alert(token1)
@@ -370,7 +389,7 @@ function nullHandler(){};
     }
   });
 })
-.directive('myDirective', function() {
+/*.directive('myDirective', function() {
      return {
     link : function(scope, element, attributes){
       element.contents().find('html').bind('click', function () {
@@ -378,7 +397,7 @@ function nullHandler(){};
        });
     }
   };
-})
+})*/
 
 .filter('trustAsResourceUrl', ['$sce', function($sce) {
     return function(val) {

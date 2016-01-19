@@ -11,7 +11,7 @@
 
 
           <h4>Register:</h4> 
-
+        <form ng-submit="register(data)">
           <label class="item item-input">
           <input type="text" placeholder="First Name" ng-model='data.fn'>
           </label>
@@ -26,7 +26,7 @@
         <br>
 
           <label class="item item-input">
-          <input type="text" placeholder="Email" ng-model='data.email'>
+          <input type="email" placeholder="Email" ng-model='data.email'>
           </label>
 
           <br>
@@ -80,11 +80,11 @@
 
         <br>   -->
 
-          <a href="#/"><button class="button button-light"> Cancel </button></a>
-
-          <button class="button" ng-click="register(data)"> Register </button>
-
           
+        </form>
+          <a href="#/"><button class="button button-light"> Cancel </button></a>
+        
+          <button class="button" ng-click="register(data)"> Register </button>
         </div>
 
     </div><!---------- loginPart end ---------->

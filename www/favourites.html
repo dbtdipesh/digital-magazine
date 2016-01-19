@@ -26,8 +26,8 @@
 
  
       <!-- <h6>Reis</h6> -->
-     <ion-slide-box delegate-handle="epub-viewer" on-slide-changed="slideChanged(index)"  does-continue="true"> 
-  <!-- auto-play="true" -->
+   <!--  <ion-slide-box delegate-handle="epub-viewer" on-slide-changed="slideChanged(index)"  does-continue="true"> 
+   
       <ion-slide ng-repeat="n in favourites | limitTo:1" ng-init='current=0;'>
       
      
@@ -43,8 +43,19 @@
         </div>
       </ion-slide>
       
-     </ion-slide-box>
-    
+     </ion-slide-box>-->
+    <div ng-repeat="n in favourites | limitTo:loopcount" ng-init='current=0;'>
+     <div class="color-red"  >
+          <a ng-repeat="magazine in favourites| limitTo:4:current+($index*4) | filter: searchKeyword"
+
+            ng-href="{{(magazine.id) ? '#app/detail/'+magazine.id : undefined}}"
+
+            ng-click="(magazine.subscribed) ?undefined:undefined"
+           
+          ><img ng-src="{{magazine.image}}" width=100% width=100%></a>
+          
+        </div>
+    </div>
       </ion-content>
       </div><!---------- searchTab end ---------->
 

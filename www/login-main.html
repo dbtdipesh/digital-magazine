@@ -7,9 +7,9 @@
         <div class="list list-inset">
 
           <img src="img/login-logo.png"/> 
-
+        <form ng-submit="login(data)">
           <label class="item item-input">
-          <input type="text"  placeholder="Username or Email" ng-model='data.username'>
+          <input type="email"  placeholder="Username or Email" ng-model='data.username'>
           </label>
 
         <br>
@@ -21,10 +21,11 @@
 
         <br>  
 
-          <!-- <a href="#app/magazine"> --><button class="button button-block button-positive" ng-click="login(data)">Login</button><!-- </a> -->
+          <!-- <a href="#app/magazine"> --><!-- </a> -->
+        <button class="button button-block button-positive" ng-click="login(data)">Login</button>
+        </form>
 
-
-          <p><a href="#forget">Forget my Username or Password?</a></p>
+          <p><a href="#forget">Forgot Password?</a></p>
 
 
 

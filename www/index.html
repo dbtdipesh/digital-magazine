@@ -33,18 +33,95 @@
     <script src="js/ng-cordova.min.js"></script>
     <script language="JavaScript">
 <!--
-function autoResize(id){
-    /*var newheight;
+/*function autoResize(id){
+    var newheight;
     var newwidth;
-    alert('test')
+    alert('test');
     if(document.getElementById){
         newheight = document.getElementById(id).contentWindow.document .body.scrollHeight;
         newwidth = document.getElementById(id).contentWindow.document .body.scrollWidth;
     }
-
+    alert(newheight+":"+newwidth);
     document.getElementById(id).height = (newheight) + "px";
-    document.getElementById(id).width = (newwidth) + "px";*/
-}
+    document.getElementById(id).width = (newwidth) + "px";
+}*/
+    document.onclick = function (e) {
+        e = e ||  window.event;
+        var element = e.target || e.srcElement;
+
+        //console.log(element.className);
+        
+        if(element.className.indexOf("inappbrowser")>0){
+        //if (element.tagName == 'A') {
+            window.open(element.href, "_blank", "location=no,presentationstyle=fullscreen,closebuttoncaption=Return,zoom=no");
+
+           /* cordova.ThemeableBrowser.open(element.href, '_blank', {
+
+    statusbar: {
+        color: '#ffffffff'
+    },
+    toolbar: {
+        height: 44,
+        color: '#f0f0f0ff'
+    },
+    title: {
+        color: '#003264ff',
+        showPageTitle: true
+    },
+    
+    closeButton: {
+        image: 'close',
+        imagePressed: 'close_pressed',
+        align: 'left',
+        event: 'closePressed'
+    },
+    customButtons: [
+        {
+            image: 'share',
+            imagePressed: 'share_pressed',
+            align: 'right',
+            event: 'sharePressed'
+        }
+    ],
+    menu: {
+        image: 'menu',
+        imagePressed: 'menu_pressed',
+        title: 'Test',
+        cancel: 'Cancel',
+        align: 'right',
+        items: [
+            {
+                event: 'helloPressed',
+                label: 'Hello World!'
+            },
+            {
+                event: 'testPressed',
+                label: 'Test!'
+            }
+        ]
+    },
+    backButtonCanClose: true,
+    transitionstyle:'coververtical',
+    fullscreen:true
+
+}).addEventListener('backPressed', function(e) {
+    alert('back pressed');
+}).addEventListener('helloPressed', function(e) {
+    alert('hello pressed');
+}).addEventListener('sharePressed', function(e) {
+    alert(e.url);
+}).addEventListener(cordova.ThemeableBrowser.EVT_ERR, function(e) {
+    console.error(e.message);
+}).addEventListener(cordova.ThemeableBrowser.EVT_WRN, function(e) {
+    console.log(e.message);
+});*/
+
+
+
+            return false; // prevent default action and stop event propagation
+        }
+    };
+
 //-->
 </script>
 <script type="text/javascript" src="js/jszip.js" ></script>

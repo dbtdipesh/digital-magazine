@@ -1,0 +1,100 @@
+<ion-view class="profilePage">
+<ion-content>
+
+<div class="list">
+  
+
+  
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Email</span>
+    <input type="text" placeholder="example@example.com" value="{{data.email}}" readonly="readonly" ng-model='data.email'>
+  </label>
+  <!-- <label class="item item-input item-stacked-label">
+    <span class="input-label">Username</span>
+    <input type="text" placeholder="Username" value="{{data.user_name}}" readonly="readonly">
+  </label> -->
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Password</span>
+    <input type="password" placeholder="Password" value="{{data.password}}" ng-model='data.password'>
+  </label>
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Confirm Password</span>
+    <input type="password" placeholder="Confirm Password" value="{{data.cpassword}}" ng-model='data.cpassword'>
+  </label>
+
+<label class="item item-input item-stacked-label">
+    <span class="input-label">First Name</span>
+    <input type="text" placeholder="First Name" value="{{data.first_name}}" ng-model='data.first_name'>
+  </label>
+<label class="item item-input item-stacked-label">
+    <span class="input-label">Last Name</span>
+    <input type="text" placeholder="First Name" value="{{data.last_name}}" ng-model='data.last_name'>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Address</span>
+    <input type="text" placeholder="address" value="{{data.address}}" ng-model='data.adress'>
+  </label>
+   <label class="item item-input item-stacked-label">
+    <span class="input-label">Country Zip Code</span>
+    <input type="text" placeholder="Country Zip Code" value="{{data.zip}}" ng-model='data.zip'>
+  </label>
+    <label class="item item-input item-stacked-label">
+    <span class="input-label">City</span>
+    <input type="text" placeholder="City" value="{{data.city}}" ng-model='data.city'>
+  </label>
+   <label class="item item-input item-stacked-label">
+    <span class="input-label">Phone</span>
+    <input type="text" placeholder="Phone" value="{{data.contact_number}}" ng-model='data.contact_number'>
+  </label>
+
+  
+
+   <ion-checkbox ng-model="data.give_a_gift">Give a Gift</ion-checkbox>
+
+<div ng-show="data.give_a_gift">
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Payer Email</span>
+    <input type="text" placeholder="Payer Email" value="{{data.email_payer}}" ng-model='data.email_payer'>
+  </label>
+<label class="item item-input item-stacked-label">
+    <span class="input-label">Payer Full Name</span>
+    <input type="text" placeholder="Payer Full Name" value="{{data.full_name}}" ng-model='data.full_name'>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Payer Address</span>
+    <input type="text" placeholder="Payer Address" value="{{data.payer_address}}" ng-model='data.payer_address'>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Country Zip Code</span>
+    <input type="text" placeholder="Country Zip Code" value="{{data.payer_zip}}" ng-model='data.payer_zip'>
+  </label>
+    <label class="item item-input item-stacked-label">
+    <span class="input-label">City</span>
+    <input type="text" placeholder="City" value="{{data.payer_city}}" ng-model='data.payer_city'>
+  </label>
+   <label class="item item-input item-stacked-label">
+    <span class="input-label">Phone</span>
+    <input type="text" placeholder="Phone" value="{{data.payer_contact_number}}" ng-model='data.payer_contact_number'>
+  </label>
+</div>
+  <!-- <label class="item item-input item-stacked-label">
+    <span class="input-label">Address</span>
+    <br><br>
+    <label><input type="text" placeholder="Address 1"></label>
+    <br>
+    <label><input type="text" placeholder="Address 2"></label>
+    <br>
+    <label><input type="text" placeholder="Zip code"></label>
+    <br>
+    <label><input type="text" placeholder="City"></label>
+  </label> -->
+
+  <!-- <label class="item item-input item-stacked-label"><a href="#">Forget my Username or Password?</a></p></label> -->
+</div>
+
+	<a ng-click="goback()"><button class="button button-light">Cancel</button></a>
+  	<button class="button button-stable" ng-click="subscribe(data)">Subscribe</button>
+
+</ion-view>
+</ion-content>

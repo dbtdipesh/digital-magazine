@@ -10,4 +10,5 @@ angular.module('starter')
   public: 'public_role'
 });
 
-var url='http://95.211.75.201/~digitalbookshelf/dev/api/';
+//var url='http://95.211.75.201/~digitalbookshelf/dev/api/';
+var url='http://95.211.75.201/~travelnewsdm/api/';

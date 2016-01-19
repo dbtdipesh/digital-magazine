@@ -2,8 +2,7 @@ body, .ionic-body
 { 
     overflow: visible;
 }
-.view-container
-{
+.view-container{
 
 
 }
@@ -21,7 +20,7 @@ body, .ionic-body
     background: #fff; 
     border: 1px solid #d1d1d1; 
     padding: 10px; 
-    margin: 40px 0px 40px 0px; 
+    margin: 40px 0 40px 0; 
 }
 .loginPart p 
 { 
@@ -39,7 +38,7 @@ body, .ionic-body
     color: #999; 
     text-decoration: none; 
 }
-.list.list-inset h4 { font-size: 15px;}
+.list .list-inset h4 { font-size: 15px;}
 .registerText p 
 {
     font-size: 13px; 
@@ -175,7 +174,7 @@ div.color-red a:first-child img
 
 .subscriptionDetail 
 { 
-    margin-top: 125px; 
+    /*margin-top: 125px; */
     padding: 0px 10px;
 }
 .subscriptionDetail img
@@ -340,7 +339,31 @@ div.color-red a:first-child img
   color: #000;
 }
 
-.iframe-placeholder
-{
+.iframe-placeholder{
    background: url('../img/loading.gif')center center no-repeat;
 }
+
+.inAppBrowserWrap {
+  background-color: rgba(0,0,0,0.75);
+  color: rgba(235,235,235,1.0);
+}
+.inAppBrowserWrap menu {
+  overflow: auto;
+  list-style-type: none;
+  padding-left: 0;
+}
+.inAppBrowserWrap menu li {
+  font-size: 25px;
+  height: 25px;
+  float: left;
+  margin: 0 10px;
+  padding: 3px 10px;
+  text-decoration: none;
+  color: #ccc;
+  display: block;
+  background: rgba(30,30,30,0.50);
+}
+.inAppBrowserWrap menu li.disabled {
+    color: #777;
+}
+

@@ -26,11 +26,11 @@
         pulling-text="Pull to refresh..."
         on-refresh="doRefresh()">
       </ion-refresher>
-
+      <!-- <a href="http://95.211.75.201/~digitalbookshelf/dev/resources/uploads/releases/zipfiles/1450093867/index.html">Testing</a> -->
   
       <!-- <h6>Reis</h6> -->
-     <ion-slide-box delegate-handle="epub-viewer" on-slide-changed="slideChanged(index)"  does-continue="true"> 
-  <!-- auto-play="true" -->
+   <!--  <ion-slide-box delegate-handle="epub-viewer" on-slide-changed="slideChanged(index)"  does-continue="true"> 
+  
       <ion-slide ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
       
      
@@ -46,10 +46,23 @@
         </div>
       </ion-slide>
       
-     </ion-slide-box>
-     <div class="bar bar-subheader" ng-if='!magazines'>
+     </ion-slide-box> -->
+    <div class="bar bar-subheader" ng-if='!magazines'>
        <span class='ion-arrow-down-c'></span> Pull to get latest magazines !!
       </div>
+    <div ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
+    <div class="color-red" >
+          <a ng-repeat="magazine in magazines | limitTo:4:current+($index*4) | filter: searchKeyword"
+
+            ng-href="{{(magazine.id) ? '#app/detail/'+magazine.id : undefined}}"
+
+            ng-click="(magazine.subscribed) ?undefined:undefined"
+           
+          ><img ng-src="{{magazine.image}}"></a>
+          
+        </div>
+    </div>
+     
       </ion-content>
       </div><!---------- searchTab end ---------->
 

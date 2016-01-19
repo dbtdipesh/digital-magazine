@@ -76,6 +76,7 @@ var datModule=angular.module('starter.controllers',[])
   //$scope.data.password='A58o6s9w';
  
   $scope.login = function(data) {
+   
 
     if(window.Connection) {
 
@@ -100,6 +101,9 @@ var datModule=angular.module('starter.controllers',[])
             title: 'Login Failed !!',
             template: 'Please check your credentials!'
           });
+                                                             
+            return false;
+                                                             
         });//AuthService.login ends
      }//else ends navigator.connection.type
     }//window.connection ends
@@ -135,6 +139,56 @@ var datModule=angular.module('starter.controllers',[])
         title: 'Failed',
         template: 'Please check your credentials!'
       });
+    $state.go('login');
+}
+  };
+
+
+})
+.controller('ChangePasswordCtrl',function($scope, $state, $ionicPopup, AuthService){
+  $scope.data = {};
+
+  //$scope.data.username='D9yDxLZ0';
+  //$scope.data.password='A58o6s9w';
+ 
+  $scope.changepassword = function(data) {
+    if(data.newpassword!=data.newpasswordagain){
+      var alertPopup = $ionicPopup.alert({
+        title: 'Failed',
+        template: 'Please check your new passwords!'
+      });
+    }
+
+    else if(data.oldpassword){
+     
+    var tokenfull=window.localStorage.getItem('tokenkey');
+   
+    if(tokenfull!==null)
+       token = tokenfull.split('.')[1];
+     else
+      token='';
+    AuthService.changepassword(data.oldpassword,data.newpassword,token).then(function(res) {
+       var alertPopup;
+      //$state.go('app.magazine', {}, {reload: true});
+      //$scope.setCurrentUsername(data.username);
+       alertPopup = $ionicPopup.alert({
+        title: 'Successfull!',
+        template: res
+      });
+      $state.go('login', {}, {reload: true});
+     // $state.go('app.magazine', {}, {reload: true});
+      console.log(res);
+    }, function(err) {
+      var alertPopup = $ionicPopup.alert({
+        title: 'Failed!',
+        template: err
+      });
+    });
+    }else{
+       var alertPopup = $ionicPopup.alert({
+            title: 'Failed',
+            template: 'Please check your credentials!'
+          });
 }
   };
 
@@ -148,7 +202,10 @@ var datModule=angular.module('starter.controllers',[])
  
   $scope.register = function(data) {
     AuthService.register(data.email, data.fn,data.ln,data.contact).then(function(res) {
-      var alertPopup = $ionicPopup.alert({
+      console.log(res);
+      var alertPopup;
+      
+       alertPopup = $ionicPopup.alert({
         title: 'Registration Successfull!',
         template: 'Enjoy !!'
       });
@@ -157,9 +214,9 @@ var datModule=angular.module('starter.controllers',[])
       //$state.go('app.magazine', {}, {reload: true});
       //$scope.setCurrentUsername(data.username);
     }, function(err) {
-      var alertPopup = $ionicPopup.alert({
+       var alertPopup = $ionicPopup.alert({
         title: 'Registration failed!',
-        template: 'Please check your credentials!'
+        template: err
       });
     });
   };
@@ -173,6 +230,65 @@ var datModule=angular.module('starter.controllers',[])
     AuthService.logout();
     $state.go('login');
   };
+})
+.controller('SubscribeCtrl',function($scope,$state,$ionicPopup,MagazineFactory,$stateParams,$cordovaSQLite){
+
+  if(window.Connection) {
+
+      if(navigator.connection.type == Connection.NONE) {
+          $ionicPopup.confirm({
+              title: "Subscription Failed !!",
+              content: "Please connect to internet"
+          })
+          .then(function(result) {
+              if(!result) {
+                  ionic.Platform.exitApp();
+              }
+          });
+          
+      }else{
+         $scope.token = window.localStorage.getItem('tokenkey');
+           MagazineFactory.getProfile().then(function(res){
+               $scope.data=res.data.data;
+               console.log(res.data.data);
+           });
+
+            MagazineFactory.getReleaseById($stateParams.id).then(function(res){
+               $scope.magazine=res.data.data;
+               console.log( $scope.magazine);
+           });
+        $scope.id=$stateParams.id;
+        $scope.goback=function(){
+          window.history.back();
+        }
+         $scope.subscribe = function(data) {
+            MagazineFactory.subscribe($scope.magazine.id,$scope.magazine.product_code,data.email,data.first_name, data.last_name, data.contact_number,data.password,data.cpassword,data.adress,data.zip,data.city,data.email_payer,data.full_name,data.payer_address,data.payer_zip,data.payer_city,data.payer_contact_number).then(function(res) {
+          console.log(res);
+         // $stateParams.id
+          var upquery = "UPDATE magazines SET subscribed='true' WHERE id=?";
+
+                                                    $cordovaSQLite.execute(db, upquery, [$scope.magazine.id]).then(function(res) {
+                                                       // console.log("UPDATE ID -> " + res.insertId+">>"+id);
+                                                        //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+                                                    }, function (err) {
+
+                                                        console.error(err);
+                                                    });
+                                                    $scope.magazine.subscribed=true;
+        
+          $state.go('app.detail', {id:$stateParams.id}, {reload: true});
+          //$scope.setCurrentUsername(data.username);
+        }, function(err) {
+          var alertPopup = $ionicPopup.alert({
+            title: 'Subscription Failed !!',
+            template: 'Please check your credentials!'
+          });
+        });//AuthService.login ends
+
+         };
+      }
+    }
+
 })
 .controller('ProfileCtrl',function($scope, $state, $http, $ionicPopup, MagazineFactory){
 
@@ -218,7 +334,7 @@ var datModule=angular.module('starter.controllers',[])
        if(cdata.length>0){
         $scope.favourites=cdata;
         $scope.loopcount=Math.ceil($scope.favourites.length/4);
-         $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+        // $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
        }
      });
 
@@ -234,7 +350,8 @@ var datModule=angular.module('starter.controllers',[])
         var magazines=[];
 
        cdata.forEach(function(entry) {
-        //console.log(entry.id)
+        //console.log(entry.id);
+        //cordova plugin add org.apache.cordova.file
           window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
             console.log(entry.id)
         fs.root.getDirectory(
@@ -284,10 +401,10 @@ var datModule=angular.module('starter.controllers',[])
        
        // console.log(magazines);
          $scope.offlinemagazine=magazines;//JSON.stringify(magazines);
-         console.log($scope.offlinemagazine.length);
+        // console.log($scope.offlinemagazine.length);
         // console.log($scope.offlinemagazine)
          $scope.loopcount=Math.ceil($scope.offlinemagazine.length/4);
-         console.log($scope.loopcount);
+         //console.log($scope.loopcount);
         
 
          //$scope.$broadcast('scroll.refreshComplete'); 
@@ -388,7 +505,7 @@ Releases.all().then(function(cdata){
   //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
  
 })
-.controller('MagazineCtrl',function($scope,MagazineFactory,Releases,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform,$cordovaSQLite,$ionicPlatform,$http,$ionicHistory){
+.controller('MagazineCtrl',function($scope,MagazineFactory,Releases,$ionicLoading,$stateParams,$ionicSlideBoxDelegate,$state,$ionicPopup,$ionicPlatform,$cordovaSQLite,$ionicPlatform,$http,$ionicHistory,$cordovaZip){
 
 
 
@@ -407,7 +524,6 @@ Releases.all().then(function(cdata){
     }
   }
 
-           
 
    $ionicLoading.show({
     content: 'Loading',
@@ -417,7 +533,7 @@ Releases.all().then(function(cdata){
     showDelay: 0
   });
 
-  if($stateParams.id!=undefined){
+  if($stateParams.id != undefined){
     if($scope.connection){
       var pos=null;
 
@@ -437,7 +553,7 @@ Releases.all().then(function(cdata){
 
            }
             function onError(error) {
-                alert('code: '    + error.code    + '\n' +
+                console.log('code: '    + error.code    + '\n' +
                         'message: ' + error.message + '\n');
             }
            //alert(pos);
@@ -494,11 +610,11 @@ Releases.all().then(function(cdata){
 
  $ionicLoading.hide();
   Releases.get($stateParams.id).then(function(cdata){
-       //console.log(cdata.length);
+       console.log(cdata);
        if(cdata.id){
          $scope.magazine=cdata;
 
-        // console.log(cdata)
+         console.log(cdata);
         $scope.newversion =cdata.version;
          $scope.file={"file":cdata.extracted_file};
 
@@ -511,7 +627,10 @@ Releases.all().then(function(cdata){
 
 
                 MagazineFactory.getReleaseById($stateParams.id).success(function(onlinedata){
-                  console.log(onlinedata.data.version);
+                  console.log(onlinedata);
+                  if(onlinedata.status=='error'){
+                    $state.go('login');
+                  }
                   $scope.newversion=onlinedata.data.version;
                 });
               }
@@ -519,36 +638,17 @@ Releases.all().then(function(cdata){
             }
 
          $scope.onlinepath=$scope.file.file;
+         //console.log($scope.onlinepath);
 
-         var statusDom; 
          var zurl=cdata.zip_file;
-        // console.log(url);
+         //console.log(zurl);
 
 
          var filename = zurl.substring(zurl.lastIndexOf('/')+1);
+        // console.log(filename);
          $scope.oldversion =cdata.version;
-         //console.log(filename);
-        // $scope.filepath='Magazine/index.html';
-         //console.log($scope.filepath);
-
-        /* File extStore = Environment.getExternalStorageDirectory();
-          File myFile = new File(extStore.getAbsolutePath() + "/Magazine/"+$stateParams.id+'/'+index.html);
-
-          if(myFile.exists()){
-              alert('exists')
-              $scope.downloaded=true;
-          }else{
-            $scope.downloaded=false;
-          }*/
-
-         /* $cordovaFile.checkDir(cordova.file.externalRootDirectory, "/Magazine/"+$stateParams.id+'/'+index.html)
-            .then(function (success) {
-              alert('exists')
-              $scope.downloaded=true;
-            }, function (error) {
-              $scope.downloaded=false;
-            });*/
-          $scope.downloaded=false;
+        
+          
 
 
           //favourite function starts
@@ -601,7 +701,9 @@ Releases.all().then(function(cdata){
                             }, 
                             function gotFileEntry(fe) {
                                 var p = fe.toURL();
-                                fe.remove();
+                                //console.log(fe);
+                                //fe.remove();
+                                console.log("start downloading..");
                                 ft = new FileTransfer();
                                /* statusDom = document.querySelector('#status');
                                 ft.onprogress = function(progressEvent) {
@@ -632,9 +734,35 @@ Releases.all().then(function(cdata){
                                             template: 'Installing...'
                                           });
 
-                                        console.log("Extracting "+ $scope.zipFile);
-                                        var ZipClient = new ExtractZipFilePlugin();
-                                        ZipClient.extractFile('sdcard/Magazine/'+$stateParams.id+'/'+filename, extractOK, extractError);
+                                        //console.log("Extracting "+ $scope.zipFile);
+                                       // console.log(entry.fullPath);
+                                      
+                                        //http://phonegap-plugins.com/plugins/michogar/extract-zipfile
+                                        console.log("start extracting..");
+                                       /* var ZipClient = new ExtractZipFilePlugin();
+                                        
+                                         console.log(file_path);
+
+                                        ZipClient.extractFile(file_path, extractOK, extractError);*/
+
+                                        console.log(dirEntry);
+                                        console.log(entry.toURL());
+                                        var file_path=entry.toURL().replace("file://", "");
+                                        $cordovaZip
+                                            .unzip(
+                                              entry.toURL(), // https://github.com/MobileChromeApps/zip/blob/master/tests/tests.js#L32
+                                              dirEntry.nativeURL // https://github.com/MobileChromeApps/zip/blob/master/tests/tests.js#L45
+                                            ).then(function () {
+                                              console.log('success');
+                                            }, function () {
+                                              console.log('unziperror');
+                                            }, function (progressEvent) {
+                                              // https://github.com/MobileChromeApps/zip#usage
+                                              console.log(progressEvent);
+                                            });
+
+
+
                                         $scope.filepath = fe.toURL();
                                         $ionicLoading.hide();
                                         $scope.downloaded=true;
@@ -657,11 +785,12 @@ Releases.all().then(function(cdata){
                                     function(error) {
                                         $ionicLoading.hide();
                                         $scope.downloaded=false;
-                                        alert("Download Error Source -> " + error.source);
+                                        console.log("Download Error Source -> " + error.source);
                                     },
                                     false,
                                     null
                                 );
+                              fe.remove();
                             }, 
                             function() {
                                 $ionicLoading.hide();
@@ -679,16 +808,15 @@ Releases.all().then(function(cdata){
             });
         }; //function download ends
 
-        function extractOK(status)
-        {
+        function extractOK(status){
             console.log("extractOK");
         };
 
-        function extractError(error)
-        { 
-            console.log("extractError "+error);
+        function extractError(error){ 
+            alert("extractError "+error);
         };
 
+        $scope.downloaded=false;
 
         //check if magazine is in phonememory
          window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
@@ -698,16 +826,19 @@ Releases.all().then(function(cdata){
                       create: false
                   },
                   function(dirEntry) {
+
+                    console.log("Magazine/"+$stateParams.id);
                       dirEntry.getFile(
-                          'index.html', 
+                          'index.html',
                           {
                               create: false, 
                               exclusive: false
                           }, 
-                          function gotFileEntry(fe) {
+                          function gotFileEntry(fee) {
                               $ionicLoading.hide();
-                              $scope.filepath = fe.toURL();
+                              $scope.filepath = fee.toURL();
                               $scope.downloaded=true;
+                             // alert('a');
                               //$scope.filepath=fs.root.getDirectory+"Magazine/"+$stateParams.id+'index.html';
                               //console.log($scope.zipFile);
                               //console.log("Extracting "+ $scope.zipFile);
@@ -734,64 +865,7 @@ Releases.all().then(function(cdata){
 
 
 
-
-         /*JSZipUtils.getBinaryContent('resources/Archive.zip', function(err, data) {
-          if(err) {
-            throw err; // or handle err
-            
-          }
-         var zip = new JSZip(data);
-          //console.log(zip.file('test.html').asText());
-          var text=zip.file('index.html').asText();
-          console.log(text);
-          text.replace('javascript/','js/');
-          $scope.content=text;
-          console.log(text)
-          //$('#test').html(index);
-        });*/
-
-
-
-
-      /*  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
-      filesystem = fs;
-      zipPath = fs.root.fullPath + filename
-      resourceURL = zipPath;
-      var fileTransfer = new FileTransfer();
-
-      fileTransfer.download(url, zipPath, function (entry) {
-               console.log(entry.fullPath+"  Hello!"); // entry is fileEntry object
-               
-               var loader = new ZipLoader(entry.fullPath);
-                $.each(loader.getEntries(entry.fullPath), function(i, entry) {
-                console.log("Name: "+ entry.name()+ " Size: "+ entry.size+ " is Directory: "+ entry.isDirectory());
-                });
-
-                }, function (error) {
-                    console.log("Some error");
-              });
-
-        }, function (error) {
-               console.log("Some error");
-      });
-*/
-
-
-
-
-         //$scope.path='http://95.211.75.201/~digitalbookshelf/dev/resources/uploads/releases/zipfiles/1444733784/index.html';
-        // console.log(cdata.data);
-        // $scope.loopcount=Math.ceil($scope.magazines.length/4);
-         //console.log(cdata.data);
-           //Book = ePub('http://futurepress.github.io/epub.js/reader/moby-dick.epub');
-          /* Book = ePub($scope.magazine.epub_file);
-
-           Book.renderTo("area").then(function(){
-              Book.setStyle("padding", "0 40px");
-            });*/
-          //Book.renderTo("area");
-
-          $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+         //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
          $ionicLoading.hide();
         }
         //console.log($scope.magazines);
@@ -820,7 +894,11 @@ Releases.all().then(function(cdata){
                
 
                MagazineFactory.getAllReleasesByMagazineId().success(function(cdata){
-                 //console.log(cdata);
+                 console.log(cdata);
+
+                if(cdata.status=='error'){
+                    $state.go('login');
+                  }
 
                  if(cdata.message=='Succes'){
                    /* var delquery = "Delete from magazines";
@@ -878,9 +956,9 @@ Releases.all().then(function(cdata){
                                                       function(ec) {
                                                           //$ionicLoading.hide();
                                                           imgFile = ec.toURL();
-                                                         var insertquery = "INSERT OR REPLACE INTO magazines (id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file,deleted) VALUES (?,?,?,?,?,?,?,?,?,?,0)";
+                                                         var insertquery = "INSERT OR REPLACE INTO magazines (id, article,extracted_file,image,introduction,issued_date,name,subscribed,update_time,zip_file,deleted,is_free,release_id) VALUES (?,?,?,?,?,?,?,?,?,?,0,?,?)";
 
-                                                    $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,imgFile,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file]).then(function(res) {
+                                                    $cordovaSQLite.execute(db, insertquery, [entry.id, entry.article,entry.extracted_file,imgFile,entry.introduction,entry.issued_date,entry.name,entry.subscribed,entry.update_time,entry.zip_file,entry.is_free,entry.release_id]).then(function(res) {
                                                         console.log("INSERT ID -> " + res.insertId+">>"+imgFile);
                                                         //$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
                                                     }, function (err) {
@@ -936,7 +1014,7 @@ Releases.all().then(function(cdata){
                       $scope.magazines=cdata.data;
                        $scope.loopcount=Math.ceil($scope.magazines.length/4);
                        console.log($scope.loopcount);
-                       $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+                      // $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
                        $scope.$broadcast('scroll.refreshComplete');
                       
                     }
@@ -961,7 +1039,7 @@ Releases.all().then(function(cdata){
          $scope.magazines=cdata;
          $scope.loopcount=Math.ceil($scope.magazines.length/4);
          //console.log(cdata.data);
-        $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+       // $ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
          $ionicLoading.hide();
         }else{
           //alert('please logot and login again');
@@ -970,13 +1048,13 @@ Releases.all().then(function(cdata){
          // $state.go('logout')
         }
         //console.log($scope.magazines);
-    })
+    });
 //first page loaded by this function ends
-$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
+//$ionicSlideBoxDelegate.$getByHandle('epub-viewer').update();
 $ionicLoading.hide();
 }
 
-})
+});
 
  
     

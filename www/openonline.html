@@ -1,19 +1,14 @@
-
 <ion-view ><!-- on-swipe-right="onSwipeRight()" on-swipe-left="onSwipeLeft()" -->
-<ion-content scroll="true" overflow-scroll="true" class="iframe-issue" >
+<ion-content scroll="true" overflow-scroll="true" s>
 
-<!-- {{magazine.extracted_file}}<div ng-include src="http://projectstorehouse.com/testmagazine/"</div> -->
-<iframe ng-src="{{onlinepath   | trustAsResourceUrl}}" style="width:100%;height:100%;" class="iframe-placeholder" myDirective></iframe>
+<iframe data-tap-disabled="true" ng-src="{{magazine.extracted_file   | trustAsResourceUrl}}" style="width:100%;min-height: 100%" ></iframe>
 
-<div >
-	{{content}}
-	</div>
 
 
 <!-- <div id="prev" onclick="Book.prevPage();" class="arrow">‹</div> 
 
  <div id="next" onclick="Book.nextPage();"class="arrow">›</div> 
  -->
-
-</ion-view>
 </ion-content>
+</ion-view>
+

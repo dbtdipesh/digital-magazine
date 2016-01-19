@@ -63,6 +63,20 @@ angular.module('magazines.services',[])
                       header:headers
                     });
             },
+             subscribe:function(release_id,product_code,email,first_name,last_name,contact_number,password,cpassword,address,zip,city,email_payer,full_name,payer_address,payer_zip,payer_city,payer_contact_number){
+              //console.log(url+'subscribe?token='+token+'&email='+email+'&first_name='+fn+'&last_name='+ln+'&contact_number='+contact);
+              var tokenfull=window.localStorage.getItem('tokenkey');
+            if(tokenfull!=null)
+               token = tokenfull.split('.')[1];
+             else
+              token='';
+              //data={id:1};
+              return $http({
+                      method: 'get',
+                      url: url+'subscribe-by-release-id?token='+token+'&release_id='+release_id+'&product_code='+product_code+'&email='+email+'&first_name='+first_name+'&last_name='+last_name+'&contact_number='+contact_number+'&password='+password+'&address='+address+'&zip='+zip+'&city='+city+'&email_payer='+email_payer+'&full_name='+full_name+'&payer_address='+payer_address+'&payer_zip='+payer_zip+'&payer_city='+payer_city+'&payer_contact_number='+payer_contact_number,
+                      header:headers
+                    });
+            },
             getAllReleasesByMagazineIdoff: function() {
  
  
@@ -194,6 +208,42 @@ angular.module('magazines.services',[])
     });
   };
 
+  var changepassword = function(oldpassword,newpassword,token) {
+    console.log(url+'change-password?oldpassword='+oldpassword);
+    return $q(function(resolve, reject) {
+         var data ={token: token,old_password: oldpassword,newpassword:newpassword};
+        var magazine_id='1';
+        var user;
+
+               $http({
+                            url: url+'change-password?token='+token+'&old-password='+oldpassword+'&new-password='+newpassword,
+                            method: "post",
+                            data: data,
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            }).success(function(res){
+
+                                console.log(res);
+                                //return res;
+
+                               if(res.status=='error'){
+                                    //return res.message;
+                                    reject(res.message);
+                                    //alert(res.message);
+                                }else{
+                                       //user=res.data;
+                                      //return res.message;
+                                        //storeUserCredentials(name +'.'+ user.token);
+                                        resolve(res.message);
+                                      // alert(res.message);
+                                }
+
+                                
+                            });
+
+                          
+    });
+  };
+
    var register = function(email, fn,ln,contact) {
     //console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
     return $q(function(resolve, reject) {
@@ -211,7 +261,9 @@ angular.module('magazines.services',[])
                                 console.log(res)
 
                                if(res.status=='error'){
-                                    return res.message;
+                                    /*alert('a');
+                                    return res.message;*/
+                                    reject(res.message);
                                 }else{
                                        user=res.data;
                                         
@@ -300,6 +352,7 @@ angular.module('magazines.services',[])
     logout: logout,
     isAuthorized: isAuthorized,
     retrieve: retrieve,
+    changepassword: changepassword,
     isAuthenticated: function() {return isAuthenticated;},
     username: function() {return username;},
     role: function() {return role;}
