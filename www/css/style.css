@@ -1,5 +1,5 @@
-body, .ionic-body 
-{ 
+body, .ionic-body
+{
     overflow: visible;
 }
 .view-container{
@@ -8,96 +8,96 @@ body, .ionic-body
 }
 /*.loginTab
 {
-	background:url(../img/login-Bg.png) center center fixed; 
+	background:url(../img/login-Bg.png) center center fixed;
     padding-bottom: 100px;
 }*/
 .formBg{ background:url(../img/login-Bg.png) center center fixed;}
-.loginPart 
+.loginPart
 {
-    top: 50%; 
-    left: 10%; 
-    position: relative; 
-    background: #fff; 
-    border: 1px solid #d1d1d1; 
-    padding: 10px; 
-    margin: 40px 0 40px 0; 
+    top: 50%;
+    left: 10%;
+    position: relative;
+    background: #fff;
+    border: 1px solid #d1d1d1;
+    padding: 10px;
+    margin: 40px 0 40px 0;
 }
-.loginPart p 
-{ 
-    font-size: 12px; 
-    padding-top: 10px; 
+.loginPart p
+{
+    font-size: 12px;
+    padding-top: 10px;
     text-align: center;
 }
-.loginPart p a 
+.loginPart p a
 {
-    color: #666; 
-    text-decoration: none; 
+    color: #666;
+    text-decoration: none;
 }
-.loginPart p a:hover 
+.loginPart p a:hover
 {
-    color: #999; 
-    text-decoration: none; 
+    color: #999;
+    text-decoration: none;
 }
 .list .list-inset h4 { font-size: 15px;}
-.registerText p 
+.registerText p
 {
-    font-size: 13px; 
-    padding-top: 10px; 
-    text-align: center; 
+    font-size: 13px;
+    padding-top: 10px;
+    text-align: center;
     font-weight:bold;
 }
-.registerText p a 
+.registerText p a
 {
-    color: #666; 
-    text-decoration: none; 
+    color: #666;
+    text-decoration: none;
 }
-.registerText p a:hover 
+.registerText p a:hover
 {
-    color: #999; 
-    text-decoration: none; 
+    color: #999;
+    text-decoration: none;
 }
-.newUserRegister 
-{ 
+.newUserRegister
+{
     margin-top: 30px;
 }
-.newUserRegister p 
-{ 
-    text-align: center; 
-    font-size: 14px; 
+.newUserRegister p
+{
+    text-align: center;
+    font-size: 14px;
     padding-top: 15px;
 }
-.newUserRegister a 
-{ 
+.newUserRegister a
+{
     text-decoration:none;
 }
-.newUserRegister a:hover 
-{ 
+.newUserRegister a:hover
+{
     text-decoration:none;
 }
-.loginPart .card, .list-inset img 
-{ 
-    width: 180px; 
-    height: auto; 
-    margin: 0px auto; 
-    display: block; 
+.loginPart .card, .list-inset img
+{
+    width: 180px;
+    height: auto;
+    margin: 0px auto;
+    display: block;
     padding-bottom: 30px;
 }
-.loginPart .card, .list-inset 
+.loginPart .card, .list-inset
 {
   overflow: visible;
   margin: 20px 10px;
   border-radius: 2px;
-  background-color: transparent  !important; 
+  background-color: transparent  !important;
 }
-.register .button 
-{ 
-    margin-right: 20px; 
-    margin-top: 25px; 
+.register .button
+{
+    margin-right: 20px;
+    margin-top: 25px;
     margin-bottom: 15px;
-} 
+}
 .headLogo {
 margin-top: -6px;
-} 
+}
 .headLogo p {
 font-size: 16px;
 font-weight: bold;
@@ -114,43 +114,43 @@ margin-right: 5px;
 {
 	margin-top: 60px;
 }
-.searchTab h5 
-{ 
-    padding-left: 10px; 
+.searchTab h5
+{
+    padding-left: 10px;
     padding-top: 30px;
 }
-.loginPart a 
-{ 
-    text-decoration:none;
-}
-.loginPart a:hover 
-{ 
-    text-decoration:none;
-}
-.card p 
-{ 
-    font-size: 13px; 
-}
-.slider 
+.loginPart a
 {
-    height:100%; 
+    text-decoration:none
+;}
+.loginPart a:hover
+{
+    text-decoration:none;
+}
+.card p
+{
+    font-size: 13px;
+}
+.slider
+{
+    height:100%;
 }
 .scrool
 {
     height:100%;
 }
-.magazinesContent 
-{ 
+.magazinesContent
+{
     width: 100%;
-    margin-top: 125px; 
+    margin-top: 70px;
     padding: 0px 10px;
     background-color: #fff;
 }
-.slider-pager 
+.slider-pager
 {
     font-size: 10px;
 }
-.slider-pager .slider-pager-page 
+.slider-pager .slider-pager-page
 {
     margin: 0px 0px;
 }
@@ -163,7 +163,7 @@ margin-right: 5px;
 
 
 .color-red { width: 102%;}
-.color-red img 
+.color-red img
 {
     width: 22%;
     margin-bottom: 40px;
@@ -171,12 +171,12 @@ margin-right: 5px;
     display: inline;
 }
 div.color-red a:first-child img
-{ 
+{
     margin-left: 0px !important;
 }
 
-.subscriptionDetail 
-{ 
+.subscriptionDetail
+{
     /*margin-top: 125px; */
     padding: 0px 10px;
 }
@@ -184,7 +184,7 @@ div.color-red a:first-child img
 {
     width: 60%;
 }
-.subscriptionDetail ul li 
+.subscriptionDetail ul li
 {
     font-size: 13px;
     padding-top: 10px;
@@ -192,7 +192,7 @@ div.color-red a:first-child img
     font-weight: bold;
 }
 
-.subscriptionDetail .button-balanced 
+.subscriptionDetail .button-balanced
 {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -223,7 +223,7 @@ div.color-red a:first-child img
 {
     padding-left: 10px;
 }
-.notSubscriberDetail label, input, button, select, textarea 
+.notSubscriberDetail label, input, button, select, textarea
 {
     font-weight: normal;
     font-size: 13px;
@@ -231,14 +231,14 @@ div.color-red a:first-child img
     margin-right: 15px;
 }
 
-.notSubscriberDetail input[type="radio"], input[type="checkbox"] 
+.notSubscriberDetail input[type="radio"], input[type="checkbox"]
 {
     margin: 0px;
     line-height: normal;
     position: relative;
     top: 2px;
 }
-.notSubscriberDetail .button 
+.notSubscriberDetail .button
 {
     margin-top: 40px;
     margin-right:10px;
@@ -246,9 +246,9 @@ div.color-red a:first-child img
 }
 
 
-.subscriptionVerification 
-{ 
-    margin-top: 125px; 
+.subscriptionVerification
+{
+    margin-top: 125px;
     padding: 0px 10px;
 }
 .subscriptionVerification h4
@@ -261,13 +261,13 @@ div.color-red a:first-child img
     width: 60%;
     margin-top: 30px;
 }
-.subscriptionVerification ul li 
+.subscriptionVerification ul li
 {
     font-size: 13px;
     padding-top: 5px;
 }
 
-.subscriptionVerification .button-balanced 
+.subscriptionVerification .button-balanced
 {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -316,7 +316,7 @@ div.color-red a:first-child img
     left: 40px;
 }
 
-#next {  
+#next {
   right: 40px;
 }
 
@@ -337,7 +337,7 @@ div.color-red a:first-child img
 .arrow:hover {
   color: #777;
 }
- 
+
 .arrow:active {
   color: #000;
 }
@@ -446,7 +446,7 @@ float: left;
   width: 100%;
   height: 100%;
   z-index: 10000;
-  /* fixes overlap error in IE7/8, 
+  /* fixes overlap error in IE7/8,
      make sure you have an empty gif */
   background-image: url('empty.gif');
   color: #000;
