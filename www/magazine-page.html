@@ -9,7 +9,7 @@
       <div class="list list-inset">
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
-          <input type="text" placeholder="Search" ng-model="searchKeyword">
+          <input type="text" placeholder="Search" ng-model="searchKeyword" ng-keyup="search(searchKeyword)">
         </label>
       </div>
 
@@ -50,7 +50,7 @@
     <div class="bar bar-subheader" ng-if='!magazines'>
        <span class='ion-arrow-down-c'></span> Pull to get latest magazines !!
       </div>
-    <div ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
+    <div ng-if="searchKeyword=='' || searching==false" ng-repeat="n in magazines | limitTo:loopcount" ng-init='current=0;'>
     <div class="color-red" >
           <a ng-repeat="magazine in magazines | limitTo:4:current+($index*4) | filter: searchKeyword"
 
@@ -62,7 +62,7 @@
           
         </div>
     </div>
-     
+     <div ng-bind-html="myHTML" ng-if="searchKeyword || searching==true"></div>
       </ion-content>
       </div><!---------- searchTab end ---------->
 

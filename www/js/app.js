@@ -105,8 +105,8 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
 
 
   
-      db = $cordovaSQLite.openDB({ name: 'travel.db' });
-      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,is_free INT NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0,release_id INT NOT NULL DEFAULT 0)");
+      db = $cordovaSQLite.openDB({ name: 'travelnewsnorway.db' });
+      $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,is_free INT NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0,release_id INT NOT NULL DEFAULT 0,content TEXT NULL)");
           
    
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {

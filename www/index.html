@@ -31,7 +31,17 @@
     <!--<script src="js/epub.min.js"></script>-->
     <script src="js/zip.min.js"></script>
     <script src="js/ng-cordova.min.js"></script>
-    <script language="JavaScript">
+
+<script type="text/javascript" src="js/jszip.js" ></script>
+<script type="text/javascript" src="js/jszip-utils.js"></script>
+  </head>
+  <body ng-app="starter" class="loginTab">
+    <ion-nav-view></ion-nav-view>
+
+
+
+
+     <script language="JavaScript">
 <!--
 /*function autoResize(id){
     var newheight;
@@ -46,13 +56,16 @@
     document.getElementById(id).width = (newwidth) + "px";
 }*/
     document.onclick = function (e) {
+
         e = e ||  window.event;
         var element = e.target || e.srcElement;
 
-        //console.log(element.className);
-        
+        console.log(element);
+       
         if(element.className.indexOf("inappbrowser")>0){
         //if (element.tagName == 'A') {
+            //alert("a");
+           
             window.open(element.href, "_blank", "location=no,presentationstyle=fullscreen,closebuttoncaption=Return,zoom=no");
 
            /* cordova.ThemeableBrowser.open(element.href, '_blank', {
@@ -119,20 +132,11 @@
 
 
             return false; // prevent default action and stop event propagation
-        }
+        
+    }
     };
 
 //-->
 </script>
-<script type="text/javascript" src="js/jszip.js" ></script>
-<script type="text/javascript" src="js/jszip-utils.js"></script>
-  </head>
-  <body ng-app="starter" class="loginTab">
-    <ion-nav-view></ion-nav-view>
-
-
-
-
- 
   </body>
   </html>

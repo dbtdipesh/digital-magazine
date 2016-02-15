@@ -43,9 +43,10 @@ angular.module('magazines.services',[])
               token='';
               //data={id:1};
               return $http({
-                      method: 'get',
-                      url: url+'get-user-detail-by-token?token='+token,
-                      header:headers
+                      method: 'POST',
+                      url: url+'get-user-detail-by-token',
+                      Authorization:'Basic YmVlcDpib29w',
+                     // header:headers
                     });
             },
 
@@ -57,10 +58,13 @@ angular.module('magazines.services',[])
              else
               token='';
               //data={id:1};
+               var data =JSON.stringify({email:email,token:token,first_name:fn,last_name:ln,contact_number:contact});
               return $http({
-                      method: 'get',
-                      url: url+'update-my-profile?token='+token+'&email='+email+'&first_name='+fn+'&last_name='+ln+'&contact_number='+contact,
-                      header:headers
+                      method: 'POST',
+                      url: url+'update-my-profile',
+                      data: data,
+                      Authorization:'Basic YmVlcDpib29w',
+                     // header:headers
                     });
             },
              subscribe:function(release_id,product_code,email,first_name,last_name,contact_number,password,cpassword,address,zip,city,email_payer,full_name,payer_address,payer_zip,payer_city,payer_contact_number){
@@ -71,10 +75,13 @@ angular.module('magazines.services',[])
              else
               token='';
               //data={id:1};
+               var data =JSON.stringify({token:token,release_id:release_id,product_code:product_code,email:email,first_name:first_name,last_name:last_name,contact_number:contact_number,password:password,address:address,zip:zip,city:city,email_payer:email_payer,full_name:full_name,payer_address:payer_address,payer_zip:payer_zip,payer_city:payer_city,payer_contact_number:payer_contact_number});
               return $http({
-                      method: 'get',
-                      url: url+'subscribe-by-release-id?token='+token+'&release_id='+release_id+'&product_code='+product_code+'&email='+email+'&first_name='+first_name+'&last_name='+last_name+'&contact_number='+contact_number+'&password='+password+'&address='+address+'&zip='+zip+'&city='+city+'&email_payer='+email_payer+'&full_name='+full_name+'&payer_address='+payer_address+'&payer_zip='+payer_zip+'&payer_city='+payer_city+'&payer_contact_number='+payer_contact_number,
-                      header:headers
+                      method: 'POST',
+                      url: url+'subscribe-by-release-id',
+                      data:data,
+                      Authorization:'Basic YmVlcDpib29w',
+                      //header:headers
                     });
             },
             getAllReleasesByMagazineIdoff: function() {
@@ -107,9 +114,10 @@ angular.module('magazines.services',[])
                  var data =JSON.stringify({magazine_id: '1',token:token});
                 //return $http.post('http://localhost/attendance/api/login',data);
                var ret= $http({
-                            url: url+'get-all-releases-by-magazine-id?token='+token+'&magazine_id=1',
-                            method: "get",
+                            url: url+'get-all-releases-by-magazine-id',
+                            method: "POST",
                             data: data,
+                            Authorization:'Basic YmVlcDpib29w',
                            //headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
                             }).success(function(res){
                                 return res;
@@ -180,10 +188,11 @@ angular.module('magazines.services',[])
         var user;
 
                $http({
-                            url: url+'forgot-password?email='+email,
-                            method: "post",
+                            url: url+'forgot-password',
+                            method: "POST",
                             data: data,
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            Authorization:'Basic YmVlcDpib29w',
+                            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                             }).success(function(res){
 
                                 console.log(res);
@@ -216,10 +225,11 @@ angular.module('magazines.services',[])
         var user;
 
                $http({
-                            url: url+'change-password?token='+token+'&old-password='+oldpassword+'&new-password='+newpassword,
-                            method: "post",
+                            url: url+'change-password',
+                            method: "POST",
                             data: data,
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            Authorization:'Basic YmVlcDpib29w',
                             }).success(function(res){
 
                                 console.log(res);
@@ -247,15 +257,16 @@ angular.module('magazines.services',[])
    var register = function(email, fn,ln,contact) {
     //console.log(url+'register?email='+email+'&first_name='+fn+'&last_name='+ln);
     return $q(function(resolve, reject) {
-         var data ={email: email, first_name: fn,last_name: ln,magazine_id: 1};
+         var data ={email: email, first_name: fn,last_name: ln,magazine_id: 1,contact_number:contact};
         var magazine_id='1';
         var user;
 
                $http({
-                            url: url+'register?email='+email+'&first_name='+fn+'&last_name='+ln+'&magazine_id='+magazine_id+'&contact_number='+contact,
-                            method: "post",
+                            url: url+'register',
+                            method: "POST",
                             data: data,
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            Authorization:'Basic YmVlcDpib29w',
+                           // headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                             }).success(function(res){
 
                                 console.log(res)
@@ -296,11 +307,13 @@ angular.module('magazines.services',[])
         var user;
 
                $http({
-                            url: url+'login?username='+name+'&password='+pw,
-                            method: "get",
+                            url: url+'login',
+                            method: "POST",
                             data: data,
+                            Authorization:'Basic YmVlcDpib29w',
                            // headers: headers//{'Content-Type': 'application/x-www-form-urlencoded'},
                             }).success(function(res){
+                                
 
                                 console.log(res)
 
