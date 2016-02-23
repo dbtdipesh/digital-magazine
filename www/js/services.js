@@ -220,7 +220,7 @@ angular.module('magazines.services',[])
   var changepassword = function(oldpassword,newpassword,token) {
     console.log(url+'change-password?oldpassword='+oldpassword);
     return $q(function(resolve, reject) {
-         var data ={token: token,old_password: oldpassword,newpassword:newpassword};
+         var data ={token: token,'old-password': oldpassword,'new-password':newpassword};
         var magazine_id='1';
         var user;
 

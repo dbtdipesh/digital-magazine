@@ -885,8 +885,8 @@ Releases.all().then(function(cdata){
 
   $scope.doRefresh = function() {
 
-
-  $scope.searching=false;
+    if(!$scope.searchKeyword)
+        $scope.searching=false;
     if(window.Connection) {
 
                 if(navigator.connection.type == Connection.NONE) {

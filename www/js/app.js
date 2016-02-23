@@ -51,14 +51,12 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
 
     var version = $cordovaDevice.getVersion();
     var connection=false;
-   
     if(window.Connection) {
 
     if(navigator.connection.type == Connection.NONE) {
         connection=false;
     }else{
       connection=true;
-      
     }
   }
     document.addEventListener("pause", onPause, false);
@@ -74,9 +72,6 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
 
             }
     }
-
-
-
 
     function onResume(){
       reading_release_id=window.localStorage.getItem('release_id');
@@ -96,19 +91,15 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
               window.localStorage.setItem('device', device);
               window.localStorage.setItem('geo_location', pos);
 
-
             });
         }
     }
 
 
-
-
-  
       db = $cordovaSQLite.openDB({ name: 'travelnewsnorway.db' });
       $cordovaSQLite.execute(db,"CREATE TABLE IF NOT EXISTS magazines (id integer primary key, article TEXT NULL, extracted_file TEXT NULL, image TEXT NULL, introduction TEXT NULL, issued_date TEXT NULL, name TEXT NULL, subscribed TEXT NULL, update_time TEXT NULL, zip_file TEXT NULL,deleted BOOLEAN NOT NULL DEFAULT 0,is_free INT NOT NULL DEFAULT 0,favourite BOOLEAN NOT NULL DEFAULT 0 ,version varchar NULL DEFAULT 0,release_id INT NOT NULL DEFAULT 0,content TEXT NULL)");
-          
-   
+
+
  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs) {
                 fs.root.getDirectory(
                     "Magazine/",
@@ -118,15 +109,10 @@ var starter=angular.module('starter', ['ionic', 'starter.controllers','magazines
                 );
             },
             function() {
-                
+
             });
 
-
-
-
-
   });
-
 
 /* if (!window.openDatabase) {
    // not all mobile devices support databases  if it does not, the
@@ -157,8 +143,6 @@ function nullHandler(){};
 [],nullHandler,errorHandler);
  },errorHandler,successCallBack);*/
 
-
-
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -170,20 +154,20 @@ function nullHandler(){};
     controller: 'AppCtrl'
   })
 
- 
+
   .state('login', {
     url: '/login',
     templateUrl: 'login-main.html',
     //controller: 'AppCtrl'
     controller: 'LoginCtrl'
-    
+
   })
   .state('forget', {
     url: '/forget',
     templateUrl: 'forget.html',
     //controller: 'AppCtrl'
     controller: 'ForgetCtrl'
-    
+
   })
   .state('app.changepassword', {
     url: '/changepassword',
@@ -191,17 +175,17 @@ function nullHandler(){};
       'menuContent': {
         templateUrl: 'change-password.html',
         controller:'ChangePasswordCtrl'
-        
+
       }
     }
-    
+
   })
  /* .state('app.search', {
     url: '/search',
     views: {
       'menuContent': {
         templateUrl: 'search.html',
-        
+
       }
     }
   })*/
@@ -211,7 +195,7 @@ function nullHandler(){};
       'menuContent': {
         templateUrl: 'setting.html',
         controller:'SettingCtrl'
-        
+
       }
     }
   })
@@ -221,11 +205,11 @@ function nullHandler(){};
       'menuContent': {
         templateUrl: 'contacts.html',
         controller:'FileController'
-        
+
       }
     }
   })
-  
+
   .state('app.profile', {
     url: '/profile',
     views: {
@@ -238,19 +222,18 @@ function nullHandler(){};
 
   .state('newRegister', {
     url: '/newRegister',
-    
+
         templateUrl: 'registration-new-subscriber.html',
          controller:'RegisterCtrl'
-    
-  })
 
+  })
 
   .state('digitalAccess', {
     url: '/digitalAccess',
-    
+
         templateUrl: 'digital-access.html',
-      
-    
+
+
   })
 
   .state('app.subscriberVerification', {
@@ -309,7 +292,7 @@ function nullHandler(){};
     views: {
       'menuContent': {
         templateUrl: 'about.html',
-        
+
       }
     }
   })
@@ -371,7 +354,7 @@ function nullHandler(){};
 
 .run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
   $rootScope.$on('$stateChangeStart', function (event,next, nextParams, fromState) {
- 
+
     if ('data' in next && 'authorizedRoles' in next.data) {
       var authorizedRoles = next.data.authorizedRoles;
       if (!AuthService.isAuthorized(authorizedRoles)) {
@@ -380,7 +363,7 @@ function nullHandler(){};
         $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
       }
     }
-    
+
     if (!AuthService.isAuthenticated()) {
       if (next.name !== 'login' && next.name !== 'newRegister' && next.name !== 'forget') {
         event.preventDefault();
